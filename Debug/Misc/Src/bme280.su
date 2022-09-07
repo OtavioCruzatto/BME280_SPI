@@ -1,0 +1,10 @@
+../Misc/Src/bme280.c:14:12:bme280Init	32	static
+../Misc/Src/bme280.c:77:6:bme280GetCoefficients	48	static
+../Misc/Src/bme280.c:126:9:bme280CheckId	24	static
+../Misc/Src/bme280.c:138:6:bme280Reset	16	static
+../Misc/Src/bme280.c:145:6:bme280Control	40	static
+../Misc/Src/bme280.c:173:17:bme280GetStatus	24	static
+../Misc/Src/bme280.c:183:6:bme280Config	40	static
+../Misc/Src/bme280.c:206:9:bme280ReadTemperature	40	static
+../Misc/Src/bme280.c:233:10:bme280ReadPressure	360	static
+../Misc/Src/bme280.c:270:10:bme280ReadHumidity	40	static
