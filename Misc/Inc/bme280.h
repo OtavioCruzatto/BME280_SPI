@@ -12,55 +12,55 @@
 
 typedef struct
 {
-	uint8_t ui8Id;
-	uint8_t ui8Reset[2];
-	uint8_t ui8CtrlHum;
-	uint8_t ui8Status;
-	uint8_t ui8CtrlMeas;
-	uint8_t ui8Config;
-	uint8_t ui8Press;
-	uint8_t ui8Temp;
-	uint8_t ui8Hum;
-	uint8_t ui8DigT1T3;
-	uint8_t ui8DigP1P9;
-	uint8_t ui8DigH1;
-	uint8_t ui8DigH2H6;
+	uint8_t id;
+	uint8_t reset[2];
+	uint8_t ctrlHum;
+	uint8_t status;
+	uint8_t ctrlMeas;
+	uint8_t config;
+	uint8_t press;
+	uint8_t temp;
+	uint8_t hum;
+	uint8_t digT1T3;
+	uint8_t digP1P9;
+	uint8_t digH1;
+	uint8_t digH2H6;
 } Bme280Reg;
 
 typedef struct
 {
-	uint8_t  ui8Id;
-	GPIO_TypeDef* sSpiChipSelectPort;
-	uint16_t ui16SpiChipSelectPin;
-	uint8_t  ui8PressMsb;
-	uint8_t  ui8PressLsb;
-	uint8_t  ui8PressXlsb;
-	uint8_t  ui8TempMsb;
-	uint8_t  ui8TempLsb;
-	uint8_t  ui8TempXlsb;
-	uint8_t  ui8HumMsb;
-	uint8_t  ui8HumLsb;
-	uint16_t ui16DigT1;
-	int16_t  i16DigT2;
-	int16_t  i16DigT3;
-	uint16_t ui16DigP1;
-	int16_t  i16DigP2;
-	int16_t  i16DigP3;
-	int16_t  i16DigP4;
-	int16_t  i16DigP5;
-	int16_t  i16DigP6;
-	int16_t  i16DigP7;
-	int16_t  i16DigP8;
-	int16_t  i16DigP9;
-	uint8_t  ui8DigH1;
-	int16_t  i16DigH2;
-	uint8_t  ui8DigH3;
-	int16_t  i16DigH4;
-	int16_t  i16DigH5;
-	int8_t   i8DigH6;
-	int32_t  i32Temperature;
-	uint32_t ui32Pressure;
-	uint32_t ui32Humidity;
+	uint8_t  id;
+	GPIO_TypeDef* spiChipSelectPort;
+	uint16_t spiChipSelectPin;
+	uint8_t  pressMsb;
+	uint8_t  pressLsb;
+	uint8_t  pressXlsb;
+	uint8_t  tempMsb;
+	uint8_t  tempLsb;
+	uint8_t  tempXlsb;
+	uint8_t  humMsb;
+	uint8_t  humLsb;
+	uint16_t digT1;
+	int16_t  digT2;
+	int16_t  digT3;
+	uint16_t digP1;
+	int16_t  digP2;
+	int16_t  digP3;
+	int16_t  digP4;
+	int16_t  digP5;
+	int16_t  digP6;
+	int16_t  digP7;
+	int16_t  digP8;
+	int16_t  digP9;
+	uint8_t  digH1;
+	int16_t  digH2;
+	uint8_t  digH3;
+	int16_t  digH4;
+	int16_t  digH5;
+	int8_t   digH6;
+	int32_t  temperature;
+	uint32_t pressure;
+	uint32_t humidity;
 } Bme280DeviceData;
 
 typedef enum OVERSAMPLING
@@ -114,15 +114,15 @@ typedef enum FILTER_COEF
 	FILTER_COEF_16	= 0x04
 } FilterCoef;
 
-CommStatus bme280Init(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device);
-void bme280GetCoefficients(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device);
-uint8_t bme280CheckId(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device);
-void bme280Reset(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device);
-void bme280Control(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device, Oversampling hum, Oversampling press, Oversampling temp, Mode mode);
-MeasuringStatus bme280GetStatus(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device);
-void bme280Config(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device, TimeStandby timeStandby, FilterCoef filterCoef);
-int32_t bme280ReadTemperature(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device);
-uint32_t bme280ReadPressure(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device);
-uint32_t bme280ReadHumidity(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device);
+CommStatus bme280Init(SPI_HandleTypeDef *hspi, Bme280DeviceData *bme280Device);
+void bme280GetCoefficients(SPI_HandleTypeDef *hspi, Bme280DeviceData *bme280Device);
+uint8_t bme280CheckId(SPI_HandleTypeDef *hspi, Bme280DeviceData *bme280Device);
+void bme280Reset(SPI_HandleTypeDef *hspi, Bme280DeviceData *bme280Device);
+void bme280Control(SPI_HandleTypeDef *hspi, Bme280DeviceData *bme280Device, Oversampling hum, Oversampling press, Oversampling temp, Mode mode);
+MeasuringStatus bme280GetStatus(SPI_HandleTypeDef *hspi, Bme280DeviceData *bme280Device);
+void bme280Config(SPI_HandleTypeDef *hspi, Bme280DeviceData *bme280Device, TimeStandby timeStandby, FilterCoef filterCoef);
+int32_t bme280ReadTemperature(SPI_HandleTypeDef *hspi, Bme280DeviceData *bme280Device);
+uint32_t bme280ReadPressure(SPI_HandleTypeDef *hspi, Bme280DeviceData *bme280Device);
+uint32_t bme280ReadHumidity(SPI_HandleTypeDef *hspi, Bme280DeviceData *bme280Device);
 
 #endif /* INC_BME280_H_ */

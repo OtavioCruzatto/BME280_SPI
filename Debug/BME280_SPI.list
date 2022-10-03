@@ -27,9 +27,9 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 00000030  00000000  00000000  000201e0  2**0
                   CONTENTS, READONLY
- 12 .debug_info   00010dba  00000000  00000000  00020210  2**0
+ 12 .debug_info   00010db7  00000000  00000000  00020210  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_abbrev 000021cc  00000000  00000000  00030fca  2**0
+ 13 .debug_abbrev 000021cc  00000000  00000000  00030fc7  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  14 .debug_aranges 00000ef8  00000000  00000000  00033198  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
@@ -37,13 +37,13 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  16 .debug_macro  0002338f  00000000  00000000  00034eb0  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   00011446  00000000  00000000  0005823f  2**0
+ 17 .debug_line   00011442  00000000  00000000  0005823f  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    000d506f  00000000  00000000  00069685  2**0
+ 18 .debug_str    000d4fab  00000000  00000000  00069681  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000050  00000000  00000000  0013e6f4  2**0
+ 19 .comment      00000050  00000000  00000000  0013e62c  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00005554  00000000  00000000  0013e744  2**2
+ 20 .debug_frame  00005554  00000000  00000000  0013e67c  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -1396,14 +1396,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
  80010e4:	4293      	cmp	r3, r2
  80010e6:	d10b      	bne.n	8001100 <HAL_TIM_PeriodElapsedCallback+0x28>
 	{
-		g_ui8CounterTimer1++;
+		counterTimer1++;
  80010e8:	4b09      	ldr	r3, [pc, #36]	; (8001110 <HAL_TIM_PeriodElapsedCallback+0x38>)
  80010ea:	781b      	ldrb	r3, [r3, #0]
  80010ec:	3301      	adds	r3, #1
  80010ee:	b2da      	uxtb	r2, r3
  80010f0:	4b07      	ldr	r3, [pc, #28]	; (8001110 <HAL_TIM_PeriodElapsedCallback+0x38>)
  80010f2:	701a      	strb	r2, [r3, #0]
-		g_ui8CounterTimer2++;
+		counterTimer2++;
  80010f4:	4b07      	ldr	r3, [pc, #28]	; (8001114 <HAL_TIM_PeriodElapsedCallback+0x3c>)
  80010f6:	781b      	ldrb	r3, [r3, #0]
  80010f8:	3301      	adds	r3, #1
@@ -1459,7 +1459,7 @@ int main(void)
  8001130:	f000 f96e 	bl	8001410 <MX_USART2_UART_Init>
   /* USER CODE BEGIN 2 */
 
-  g_eBme280CommStatus = bme280Init(&hspi1, &g_sBme280Device);
+  bme280CommStatus = bme280Init(&hspi1, &bme280Device);
  8001134:	4942      	ldr	r1, [pc, #264]	; (8001240 <main+0x128>)
  8001136:	4843      	ldr	r0, [pc, #268]	; (8001244 <main+0x12c>)
  8001138:	f003 f9f6 	bl	8004528 <bme280Init>
@@ -1475,20 +1475,20 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-	  if (g_ui8CounterTimer2 >= g_ui8Delay100ms)
+	  if (counterTimer2 >= delay100ms)
  800114a:	4b41      	ldr	r3, [pc, #260]	; (8001250 <main+0x138>)
  800114c:	781b      	ldrb	r3, [r3, #0]
  800114e:	220a      	movs	r2, #10
  8001150:	4293      	cmp	r3, r2
  8001152:	d31e      	bcc.n	8001192 <main+0x7a>
 	  {
-		  if (g_eBme280CommStatus == NOK)
+		  if (bme280CommStatus == NOK)
  8001154:	4b3c      	ldr	r3, [pc, #240]	; (8001248 <main+0x130>)
  8001156:	781b      	ldrb	r3, [r3, #0]
  8001158:	2b00      	cmp	r3, #0
  800115a:	d108      	bne.n	800116e <main+0x56>
 		  {
-			  g_eBme280CommStatus = bme280Init(&hspi1, &g_sBme280Device);
+			  bme280CommStatus = bme280Init(&hspi1, &bme280Device);
  800115c:	4938      	ldr	r1, [pc, #224]	; (8001240 <main+0x128>)
  800115e:	4839      	ldr	r0, [pc, #228]	; (8001244 <main+0x12c>)
  8001160:	f003 f9e2 	bl	8004528 <bme280Init>
@@ -1498,7 +1498,7 @@ int main(void)
  800116a:	701a      	strb	r2, [r3, #0]
  800116c:	e00e      	b.n	800118c <main+0x74>
 		  }
-		  else if (bme280GetStatus(&hspi1, &g_sBme280Device) == AVAILABLE)
+		  else if (bme280GetStatus(&hspi1, &bme280Device) == AVAILABLE)
  800116e:	4934      	ldr	r1, [pc, #208]	; (8001240 <main+0x128>)
  8001170:	4834      	ldr	r0, [pc, #208]	; (8001244 <main+0x12c>)
  8001172:	f003 fc5f 	bl	8004a34 <bme280GetStatus>
@@ -1506,30 +1506,30 @@ int main(void)
  8001178:	2b00      	cmp	r3, #0
  800117a:	d107      	bne.n	800118c <main+0x74>
 		  {
-			  bme280ReadPressure(&hspi1, &g_sBme280Device);
+			  bme280ReadPressure(&hspi1, &bme280Device);
  800117c:	4930      	ldr	r1, [pc, #192]	; (8001240 <main+0x128>)
  800117e:	4831      	ldr	r0, [pc, #196]	; (8001244 <main+0x12c>)
  8001180:	f003 fd56 	bl	8004c30 <bme280ReadPressure>
-			  bme280ReadHumidity(&hspi1, &g_sBme280Device);
+			  bme280ReadHumidity(&hspi1, &bme280Device);
  8001184:	492e      	ldr	r1, [pc, #184]	; (8001240 <main+0x128>)
  8001186:	482f      	ldr	r0, [pc, #188]	; (8001244 <main+0x12c>)
  8001188:	f004 f884 	bl	8005294 <bme280ReadHumidity>
 		  }
 
-		  g_ui8CounterTimer2 = 0;
+		  counterTimer2 = 0;
  800118c:	4b30      	ldr	r3, [pc, #192]	; (8001250 <main+0x138>)
  800118e:	2200      	movs	r2, #0
  8001190:	701a      	strb	r2, [r3, #0]
 	  }
 
-	  if (g_ui8CounterTimer1 >= g_ui8Delay2s)
+	  if (counterTimer1 >= delay2s)
  8001192:	4b30      	ldr	r3, [pc, #192]	; (8001254 <main+0x13c>)
  8001194:	781b      	ldrb	r3, [r3, #0]
  8001196:	22c8      	movs	r2, #200	; 0xc8
  8001198:	4293      	cmp	r3, r2
  800119a:	d3d6      	bcc.n	800114a <main+0x32>
 	  {
-		  sprintf(g_cMessage, "Temperature = %.2f Celsius degree\r\n", (((float) g_sBme280Device.i32Temperature) / 100));
+		  sprintf(message, "Temperature = %.2f Celsius degree\r\n", (((float) bme280Device.temperature) / 100));
  800119c:	4b28      	ldr	r3, [pc, #160]	; (8001240 <main+0x128>)
  800119e:	6b9b      	ldr	r3, [r3, #56]	; 0x38
  80011a0:	ee07 3a90 	vmov	s15, r3
@@ -1543,7 +1543,7 @@ int main(void)
  80011bc:	4927      	ldr	r1, [pc, #156]	; (800125c <main+0x144>)
  80011be:	4828      	ldr	r0, [pc, #160]	; (8001260 <main+0x148>)
  80011c0:	f004 ffc0 	bl	8006144 <siprintf>
-		  HAL_UART_Transmit(&huart2, ((uint8_t *) g_cMessage), strlen(g_cMessage), g_ui32TimeoutUart);
+		  HAL_UART_Transmit(&huart2, ((uint8_t *) message), strlen(message), timeoutUart);
  80011c4:	4826      	ldr	r0, [pc, #152]	; (8001260 <main+0x148>)
  80011c6:	f7ff f823 	bl	8000210 <strlen>
  80011ca:	4603      	mov	r3, r0
@@ -1553,14 +1553,14 @@ int main(void)
  80011d2:	4824      	ldr	r0, [pc, #144]	; (8001264 <main+0x14c>)
  80011d4:	f002 fe33 	bl	8003e3e <HAL_UART_Transmit>
 
-		  sprintf(g_cMessage, "Pressure    = %"PRIu32" Pascal\r\n", g_sBme280Device.ui32Pressure);
+		  sprintf(message, "Pressure    = %"PRIu32" Pascal\r\n", bme280Device.pressure);
  80011d8:	4b19      	ldr	r3, [pc, #100]	; (8001240 <main+0x128>)
  80011da:	6bdb      	ldr	r3, [r3, #60]	; 0x3c
  80011dc:	461a      	mov	r2, r3
  80011de:	4922      	ldr	r1, [pc, #136]	; (8001268 <main+0x150>)
  80011e0:	481f      	ldr	r0, [pc, #124]	; (8001260 <main+0x148>)
  80011e2:	f004 ffaf 	bl	8006144 <siprintf>
-		  HAL_UART_Transmit(&huart2, ((uint8_t *) g_cMessage), strlen(g_cMessage), g_ui32TimeoutUart);
+		  HAL_UART_Transmit(&huart2, ((uint8_t *) message), strlen(message), timeoutUart);
  80011e6:	481e      	ldr	r0, [pc, #120]	; (8001260 <main+0x148>)
  80011e8:	f7ff f812 	bl	8000210 <strlen>
  80011ec:	4603      	mov	r3, r0
@@ -1570,7 +1570,7 @@ int main(void)
  80011f4:	481b      	ldr	r0, [pc, #108]	; (8001264 <main+0x14c>)
  80011f6:	f002 fe22 	bl	8003e3e <HAL_UART_Transmit>
 
-		  sprintf(g_cMessage, "Humidity    = %.2f%%\r\n\r\n", (((float) g_sBme280Device.ui32Humidity) /10));
+		  sprintf(message, "Humidity    = %.2f%%\r\n\r\n", (((float) bme280Device.humidity) /10));
  80011fa:	4b11      	ldr	r3, [pc, #68]	; (8001240 <main+0x128>)
  80011fc:	6c1b      	ldr	r3, [r3, #64]	; 0x40
  80011fe:	ee07 3a90 	vmov	s15, r3
@@ -1584,7 +1584,7 @@ int main(void)
  800121a:	4914      	ldr	r1, [pc, #80]	; (800126c <main+0x154>)
  800121c:	4810      	ldr	r0, [pc, #64]	; (8001260 <main+0x148>)
  800121e:	f004 ff91 	bl	8006144 <siprintf>
-		  HAL_UART_Transmit(&huart2, ((uint8_t *) g_cMessage), strlen(g_cMessage), g_ui32TimeoutUart);
+		  HAL_UART_Transmit(&huart2, ((uint8_t *) message), strlen(message), timeoutUart);
  8001222:	480f      	ldr	r0, [pc, #60]	; (8001260 <main+0x148>)
  8001224:	f7fe fff4 	bl	8000210 <strlen>
  8001228:	4603      	mov	r3, r0
@@ -1594,11 +1594,11 @@ int main(void)
  8001230:	480c      	ldr	r0, [pc, #48]	; (8001264 <main+0x14c>)
  8001232:	f002 fe04 	bl	8003e3e <HAL_UART_Transmit>
 
-		  g_ui8CounterTimer1 = 0;
+		  counterTimer1 = 0;
  8001236:	4b07      	ldr	r3, [pc, #28]	; (8001254 <main+0x13c>)
  8001238:	2200      	movs	r2, #0
  800123a:	701a      	strb	r2, [r3, #0]
-	  if (g_ui8CounterTimer2 >= g_ui8Delay100ms)
+	  if (counterTimer2 >= delay100ms)
  800123c:	e785      	b.n	800114a <main+0x32>
  800123e:	bf00      	nop
  8001240:	200002e0 	.word	0x200002e0
@@ -10299,11 +10299,11 @@ static void UART_SetConfig(UART_HandleTypeDef *huart)
  8004524:	51eb851f 	.word	0x51eb851f
 
 08004528 <bme280Init>:
-static Bme280Reg sBme280Reg;
-static int32_t i32FineTemperature = 0;
-static const uint32_t ui32TimeoutSpi = 100;
+static Bme280Reg bme280Reg;
+static int32_t fineTemperature = 0;
+static const uint32_t timeoutSpi = 100;
 
-CommStatus bme280Init(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device)
+CommStatus bme280Init(SPI_HandleTypeDef *hspi, Bme280DeviceData *bme280Device)
 {
  8004528:	b580      	push	{r7, lr}
  800452a:	b086      	sub	sp, #24
@@ -10314,193 +10314,193 @@ CommStatus bme280Init(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device)
  8004532:	2300      	movs	r3, #0
  8004534:	73fb      	strb	r3, [r7, #15]
 
-	sBme280Reg.ui8Id 					= 0xD0;
+	bme280Reg.id 					= 0xD0;
  8004536:	4b59      	ldr	r3, [pc, #356]	; (800469c <bme280Init+0x174>)
  8004538:	22d0      	movs	r2, #208	; 0xd0
  800453a:	701a      	strb	r2, [r3, #0]
-	sBme280Reg.ui8Reset[0]				= 0xE0;
+	bme280Reg.reset[0]				= 0xE0;
  800453c:	4b57      	ldr	r3, [pc, #348]	; (800469c <bme280Init+0x174>)
  800453e:	22e0      	movs	r2, #224	; 0xe0
  8004540:	705a      	strb	r2, [r3, #1]
-	sBme280Reg.ui8Reset[1]				= 0xB6;
+	bme280Reg.reset[1]				= 0xB6;
  8004542:	4b56      	ldr	r3, [pc, #344]	; (800469c <bme280Init+0x174>)
  8004544:	22b6      	movs	r2, #182	; 0xb6
  8004546:	709a      	strb	r2, [r3, #2]
-	sBme280Reg.ui8CtrlHum				= 0xF2 & 0x7F;
+	bme280Reg.ctrlHum				= 0xF2 & 0x7F;
  8004548:	4b54      	ldr	r3, [pc, #336]	; (800469c <bme280Init+0x174>)
  800454a:	2272      	movs	r2, #114	; 0x72
  800454c:	70da      	strb	r2, [r3, #3]
-	sBme280Reg.ui8Status				= 0xF3;
+	bme280Reg.status				= 0xF3;
  800454e:	4b53      	ldr	r3, [pc, #332]	; (800469c <bme280Init+0x174>)
  8004550:	22f3      	movs	r2, #243	; 0xf3
  8004552:	711a      	strb	r2, [r3, #4]
-	sBme280Reg.ui8CtrlMeas				= 0xF4 & 0x7F;
+	bme280Reg.ctrlMeas				= 0xF4 & 0x7F;
  8004554:	4b51      	ldr	r3, [pc, #324]	; (800469c <bme280Init+0x174>)
  8004556:	2274      	movs	r2, #116	; 0x74
  8004558:	715a      	strb	r2, [r3, #5]
-	sBme280Reg.ui8Config				= 0xF5 & 0x7F;
+	bme280Reg.config				= 0xF5 & 0x7F;
  800455a:	4b50      	ldr	r3, [pc, #320]	; (800469c <bme280Init+0x174>)
  800455c:	2275      	movs	r2, #117	; 0x75
  800455e:	719a      	strb	r2, [r3, #6]
-	sBme280Reg.ui8Press					= 0xF7;
+	bme280Reg.press					= 0xF7;
  8004560:	4b4e      	ldr	r3, [pc, #312]	; (800469c <bme280Init+0x174>)
  8004562:	22f7      	movs	r2, #247	; 0xf7
  8004564:	71da      	strb	r2, [r3, #7]
-	sBme280Reg.ui8Temp					= 0xFA;
+	bme280Reg.temp					= 0xFA;
  8004566:	4b4d      	ldr	r3, [pc, #308]	; (800469c <bme280Init+0x174>)
  8004568:	22fa      	movs	r2, #250	; 0xfa
  800456a:	721a      	strb	r2, [r3, #8]
-	sBme280Reg.ui8Hum					= 0xFD;
+	bme280Reg.hum					= 0xFD;
  800456c:	4b4b      	ldr	r3, [pc, #300]	; (800469c <bme280Init+0x174>)
  800456e:	22fd      	movs	r2, #253	; 0xfd
  8004570:	725a      	strb	r2, [r3, #9]
-	sBme280Reg.ui8DigT1T3				= 0x88;
+	bme280Reg.digT1T3				= 0x88;
  8004572:	4b4a      	ldr	r3, [pc, #296]	; (800469c <bme280Init+0x174>)
  8004574:	2288      	movs	r2, #136	; 0x88
  8004576:	729a      	strb	r2, [r3, #10]
-	sBme280Reg.ui8DigP1P9				= 0x8E;
+	bme280Reg.digP1P9				= 0x8E;
  8004578:	4b48      	ldr	r3, [pc, #288]	; (800469c <bme280Init+0x174>)
  800457a:	228e      	movs	r2, #142	; 0x8e
  800457c:	72da      	strb	r2, [r3, #11]
-	sBme280Reg.ui8DigH1					= 0xA1;
+	bme280Reg.digH1					= 0xA1;
  800457e:	4b47      	ldr	r3, [pc, #284]	; (800469c <bme280Init+0x174>)
  8004580:	22a1      	movs	r2, #161	; 0xa1
  8004582:	731a      	strb	r2, [r3, #12]
-	sBme280Reg.ui8DigH2H6				= 0xE1;
+	bme280Reg.digH2H6				= 0xE1;
  8004584:	4b45      	ldr	r3, [pc, #276]	; (800469c <bme280Init+0x174>)
  8004586:	22e1      	movs	r2, #225	; 0xe1
  8004588:	735a      	strb	r2, [r3, #13]
 
-	sBme280Device->ui8Id				= 0x60;
+	bme280Device->id				= 0x60;
  800458a:	683b      	ldr	r3, [r7, #0]
  800458c:	2260      	movs	r2, #96	; 0x60
  800458e:	701a      	strb	r2, [r3, #0]
-	sBme280Device->sSpiChipSelectPort	= SPI_CS_GPIO_Port;
+	bme280Device->spiChipSelectPort	= SPI_CS_GPIO_Port;
  8004590:	683b      	ldr	r3, [r7, #0]
  8004592:	4a43      	ldr	r2, [pc, #268]	; (80046a0 <bme280Init+0x178>)
  8004594:	605a      	str	r2, [r3, #4]
-	sBme280Device->ui16SpiChipSelectPin	= SPI_CS_Pin;
+	bme280Device->spiChipSelectPin	= SPI_CS_Pin;
  8004596:	683b      	ldr	r3, [r7, #0]
  8004598:	2240      	movs	r2, #64	; 0x40
  800459a:	811a      	strh	r2, [r3, #8]
-	sBme280Device->ui8PressMsb			= 0x00;
+	bme280Device->pressMsb			= 0x00;
  800459c:	683b      	ldr	r3, [r7, #0]
  800459e:	2200      	movs	r2, #0
  80045a0:	729a      	strb	r2, [r3, #10]
-	sBme280Device->ui8PressLsb			= 0x00;
+	bme280Device->pressLsb			= 0x00;
  80045a2:	683b      	ldr	r3, [r7, #0]
  80045a4:	2200      	movs	r2, #0
  80045a6:	72da      	strb	r2, [r3, #11]
-	sBme280Device->ui8PressXlsb			= 0x00;
+	bme280Device->pressXlsb			= 0x00;
  80045a8:	683b      	ldr	r3, [r7, #0]
  80045aa:	2200      	movs	r2, #0
  80045ac:	731a      	strb	r2, [r3, #12]
-	sBme280Device->ui8TempMsb			= 0x00;
+	bme280Device->tempMsb			= 0x00;
  80045ae:	683b      	ldr	r3, [r7, #0]
  80045b0:	2200      	movs	r2, #0
  80045b2:	735a      	strb	r2, [r3, #13]
-	sBme280Device->ui8TempLsb			= 0x00;
+	bme280Device->tempLsb			= 0x00;
  80045b4:	683b      	ldr	r3, [r7, #0]
  80045b6:	2200      	movs	r2, #0
  80045b8:	739a      	strb	r2, [r3, #14]
-	sBme280Device->ui8TempXlsb			= 0x00;
+	bme280Device->tempXlsb			= 0x00;
  80045ba:	683b      	ldr	r3, [r7, #0]
  80045bc:	2200      	movs	r2, #0
  80045be:	73da      	strb	r2, [r3, #15]
-	sBme280Device->ui8HumMsb			= 0x00;
+	bme280Device->humMsb			= 0x00;
  80045c0:	683b      	ldr	r3, [r7, #0]
  80045c2:	2200      	movs	r2, #0
  80045c4:	741a      	strb	r2, [r3, #16]
-	sBme280Device->ui8HumLsb			= 0x00;
+	bme280Device->humLsb			= 0x00;
  80045c6:	683b      	ldr	r3, [r7, #0]
  80045c8:	2200      	movs	r2, #0
  80045ca:	745a      	strb	r2, [r3, #17]
-	sBme280Device->ui16DigT1			= 0x0000;
+	bme280Device->digT1				= 0x0000;
  80045cc:	683b      	ldr	r3, [r7, #0]
  80045ce:	2200      	movs	r2, #0
  80045d0:	825a      	strh	r2, [r3, #18]
-	sBme280Device->i16DigT2				= 0x0000;
+	bme280Device->digT2				= 0x0000;
  80045d2:	683b      	ldr	r3, [r7, #0]
  80045d4:	2200      	movs	r2, #0
  80045d6:	829a      	strh	r2, [r3, #20]
-	sBme280Device->i16DigT3				= 0x0000;
+	bme280Device->digT3				= 0x0000;
  80045d8:	683b      	ldr	r3, [r7, #0]
  80045da:	2200      	movs	r2, #0
  80045dc:	82da      	strh	r2, [r3, #22]
-	sBme280Device->ui16DigP1			= 0x0000;
+	bme280Device->digP1				= 0x0000;
  80045de:	683b      	ldr	r3, [r7, #0]
  80045e0:	2200      	movs	r2, #0
  80045e2:	831a      	strh	r2, [r3, #24]
-	sBme280Device->i16DigP2				= 0x0000;
+	bme280Device->digP2				= 0x0000;
  80045e4:	683b      	ldr	r3, [r7, #0]
  80045e6:	2200      	movs	r2, #0
  80045e8:	835a      	strh	r2, [r3, #26]
-	sBme280Device->i16DigP3				= 0x0000;
+	bme280Device->digP3				= 0x0000;
  80045ea:	683b      	ldr	r3, [r7, #0]
  80045ec:	2200      	movs	r2, #0
  80045ee:	839a      	strh	r2, [r3, #28]
-	sBme280Device->i16DigP4				= 0x0000;
+	bme280Device->digP4				= 0x0000;
  80045f0:	683b      	ldr	r3, [r7, #0]
  80045f2:	2200      	movs	r2, #0
  80045f4:	83da      	strh	r2, [r3, #30]
-	sBme280Device->i16DigP5				= 0x0000;
+	bme280Device->digP5				= 0x0000;
  80045f6:	683b      	ldr	r3, [r7, #0]
  80045f8:	2200      	movs	r2, #0
  80045fa:	841a      	strh	r2, [r3, #32]
-	sBme280Device->i16DigP6				= 0x0000;
+	bme280Device->digP6				= 0x0000;
  80045fc:	683b      	ldr	r3, [r7, #0]
  80045fe:	2200      	movs	r2, #0
  8004600:	845a      	strh	r2, [r3, #34]	; 0x22
-	sBme280Device->i16DigP7				= 0x0000;
+	bme280Device->digP7				= 0x0000;
  8004602:	683b      	ldr	r3, [r7, #0]
  8004604:	2200      	movs	r2, #0
  8004606:	849a      	strh	r2, [r3, #36]	; 0x24
-	sBme280Device->i16DigP8				= 0x0000;
+	bme280Device->digP8				= 0x0000;
  8004608:	683b      	ldr	r3, [r7, #0]
  800460a:	2200      	movs	r2, #0
  800460c:	84da      	strh	r2, [r3, #38]	; 0x26
-	sBme280Device->i16DigP9				= 0x0000;
+	bme280Device->digP9				= 0x0000;
  800460e:	683b      	ldr	r3, [r7, #0]
  8004610:	2200      	movs	r2, #0
  8004612:	851a      	strh	r2, [r3, #40]	; 0x28
-	sBme280Device->ui8DigH1				= 0x00;
+	bme280Device->digH1				= 0x00;
  8004614:	683b      	ldr	r3, [r7, #0]
  8004616:	2200      	movs	r2, #0
  8004618:	f883 202a 	strb.w	r2, [r3, #42]	; 0x2a
-	sBme280Device->i16DigH2				= 0x0000;
+	bme280Device->digH2				= 0x0000;
  800461c:	683b      	ldr	r3, [r7, #0]
  800461e:	2200      	movs	r2, #0
  8004620:	859a      	strh	r2, [r3, #44]	; 0x2c
-	sBme280Device->ui8DigH3				= 0x00;
+	bme280Device->digH3				= 0x00;
  8004622:	683b      	ldr	r3, [r7, #0]
  8004624:	2200      	movs	r2, #0
  8004626:	f883 202e 	strb.w	r2, [r3, #46]	; 0x2e
-	sBme280Device->i16DigH4				= 0x0000;
+	bme280Device->digH4				= 0x0000;
  800462a:	683b      	ldr	r3, [r7, #0]
  800462c:	2200      	movs	r2, #0
  800462e:	861a      	strh	r2, [r3, #48]	; 0x30
-	sBme280Device->i16DigH5				= 0x0000;
+	bme280Device->digH5				= 0x0000;
  8004630:	683b      	ldr	r3, [r7, #0]
  8004632:	2200      	movs	r2, #0
  8004634:	865a      	strh	r2, [r3, #50]	; 0x32
-	sBme280Device->i8DigH6				= 0x00;
+	bme280Device->digH6				= 0x00;
  8004636:	683b      	ldr	r3, [r7, #0]
  8004638:	2200      	movs	r2, #0
  800463a:	f883 2034 	strb.w	r2, [r3, #52]	; 0x34
-	sBme280Device->i32Temperature		= 0x00000000;
+	bme280Device->temperature		= 0x00000000;
  800463e:	683b      	ldr	r3, [r7, #0]
  8004640:	2200      	movs	r2, #0
  8004642:	639a      	str	r2, [r3, #56]	; 0x38
-	sBme280Device->ui32Pressure			= 0x00000000;
+	bme280Device->pressure			= 0x00000000;
  8004644:	683b      	ldr	r3, [r7, #0]
  8004646:	2200      	movs	r2, #0
  8004648:	63da      	str	r2, [r3, #60]	; 0x3c
-	sBme280Device->ui32Humidity     	= 0x00000000;
+	bme280Device->humidity     		= 0x00000000;
  800464a:	683b      	ldr	r3, [r7, #0]
  800464c:	2200      	movs	r2, #0
  800464e:	641a      	str	r2, [r3, #64]	; 0x40
 
-	if (bme280CheckId(hspi, sBme280Device) == sBme280Device->ui8Id)
+	if (bme280CheckId(hspi, bme280Device) == bme280Device->id)
  8004650:	6839      	ldr	r1, [r7, #0]
  8004652:	6878      	ldr	r0, [r7, #4]
  8004654:	f000 f95a 	bl	800490c <bme280CheckId>
@@ -10511,17 +10511,17 @@ CommStatus bme280Init(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device)
  8004660:	429a      	cmp	r2, r3
  8004662:	d115      	bne.n	8004690 <bme280Init+0x168>
 	{
-		bme280GetCoefficients(hspi, sBme280Device);
+		bme280GetCoefficients(hspi, bme280Device);
  8004664:	6839      	ldr	r1, [r7, #0]
  8004666:	6878      	ldr	r0, [r7, #4]
  8004668:	f000 f81c 	bl	80046a4 <bme280GetCoefficients>
-		bme280Config(hspi, sBme280Device, T_10_MS, FILTER_COEF_OFF);
+		bme280Config(hspi, bme280Device, T_10_MS, FILTER_COEF_OFF);
  800466c:	2300      	movs	r3, #0
  800466e:	2206      	movs	r2, #6
  8004670:	6839      	ldr	r1, [r7, #0]
  8004672:	6878      	ldr	r0, [r7, #4]
  8004674:	f000 fa0a 	bl	8004a8c <bme280Config>
-		bme280Control(hspi, sBme280Device, OVER_EN_X_1, OVER_EN_X_1, OVER_EN_X_1, NORMAL);
+		bme280Control(hspi, bme280Device, OVER_EN_X_1, OVER_EN_X_1, OVER_EN_X_1, NORMAL);
  8004678:	2303      	movs	r3, #3
  800467a:	9301      	str	r3, [sp, #4]
  800467c:	2301      	movs	r3, #1
@@ -10549,7 +10549,7 @@ CommStatus bme280Init(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device)
 
 080046a4 <bme280GetCoefficients>:
 
-void bme280GetCoefficients(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device)
+void bme280GetCoefficients(SPI_HandleTypeDef *hspi, Bme280DeviceData *bme280Device)
 {
  80046a4:	b5b0      	push	{r4, r5, r7, lr}
  80046a6:	b088      	sub	sp, #32
@@ -10576,7 +10576,7 @@ void bme280GetCoefficients(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Dev
  80046c8:	777b      	strb	r3, [r7, #29]
 
 	// Get temperature coefficients
-	HAL_GPIO_WritePin(sBme280Device->sSpiChipSelectPort, sBme280Device->ui16SpiChipSelectPin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(bme280Device->spiChipSelectPort, bme280Device->spiChipSelectPin, GPIO_PIN_RESET);
  80046ca:	683b      	ldr	r3, [r7, #0]
  80046cc:	6858      	ldr	r0, [r3, #4]
  80046ce:	683b      	ldr	r3, [r7, #0]
@@ -10584,20 +10584,20 @@ void bme280GetCoefficients(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Dev
  80046d2:	2200      	movs	r2, #0
  80046d4:	4619      	mov	r1, r3
  80046d6:	f7fd fc3b 	bl	8001f50 <HAL_GPIO_WritePin>
-	HAL_SPI_Transmit(hspi, &sBme280Reg.ui8DigT1T3, sizeof(sBme280Reg.ui8DigT1T3), ui32TimeoutSpi);
+	HAL_SPI_Transmit(hspi, &bme280Reg.digT1T3, sizeof(bme280Reg.digT1T3), timeoutSpi);
  80046da:	2364      	movs	r3, #100	; 0x64
  80046dc:	2201      	movs	r2, #1
  80046de:	4987      	ldr	r1, [pc, #540]	; (80048fc <bme280GetCoefficients+0x258>)
  80046e0:	6878      	ldr	r0, [r7, #4]
  80046e2:	f7fe fa3a 	bl	8002b5a <HAL_SPI_Transmit>
-	HAL_SPI_Receive(hspi, coefBytes, temperatureCoefQtyBytes, ui32TimeoutSpi);
+	HAL_SPI_Receive(hspi, coefBytes, temperatureCoefQtyBytes, timeoutSpi);
  80046e6:	7ffb      	ldrb	r3, [r7, #31]
  80046e8:	b29a      	uxth	r2, r3
  80046ea:	2364      	movs	r3, #100	; 0x64
  80046ec:	f107 0108 	add.w	r1, r7, #8
  80046f0:	6878      	ldr	r0, [r7, #4]
  80046f2:	f7fe fb6e 	bl	8002dd2 <HAL_SPI_Receive>
-	HAL_GPIO_WritePin(sBme280Device->sSpiChipSelectPort, sBme280Device->ui16SpiChipSelectPin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(bme280Device->spiChipSelectPort, bme280Device->spiChipSelectPin, GPIO_PIN_SET);
  80046f6:	683b      	ldr	r3, [r7, #0]
  80046f8:	6858      	ldr	r0, [r3, #4]
  80046fa:	683b      	ldr	r3, [r7, #0]
@@ -10605,7 +10605,7 @@ void bme280GetCoefficients(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Dev
  80046fe:	2201      	movs	r2, #1
  8004700:	4619      	mov	r1, r3
  8004702:	f7fd fc25 	bl	8001f50 <HAL_GPIO_WritePin>
-	sBme280Device->ui16DigT1 = (coefBytes[1] << 8) | coefBytes[0];
+	bme280Device->digT1 = (coefBytes[1] << 8) | coefBytes[0];
  8004706:	7a7b      	ldrb	r3, [r7, #9]
  8004708:	021b      	lsls	r3, r3, #8
  800470a:	b21a      	sxth	r2, r3
@@ -10616,7 +10616,7 @@ void bme280GetCoefficients(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Dev
  8004714:	b29a      	uxth	r2, r3
  8004716:	683b      	ldr	r3, [r7, #0]
  8004718:	825a      	strh	r2, [r3, #18]
-	sBme280Device->i16DigT2  = (coefBytes[3] << 8) | coefBytes[2];
+	bme280Device->digT2 = (coefBytes[3] << 8) | coefBytes[2];
  800471a:	7afb      	ldrb	r3, [r7, #11]
  800471c:	021b      	lsls	r3, r3, #8
  800471e:	b21a      	sxth	r2, r3
@@ -10626,7 +10626,7 @@ void bme280GetCoefficients(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Dev
  8004726:	b21a      	sxth	r2, r3
  8004728:	683b      	ldr	r3, [r7, #0]
  800472a:	829a      	strh	r2, [r3, #20]
-	sBme280Device->i16DigT3  = (coefBytes[5] << 8) | coefBytes[4];
+	bme280Device->digT3 = (coefBytes[5] << 8) | coefBytes[4];
  800472c:	7b7b      	ldrb	r3, [r7, #13]
  800472e:	021b      	lsls	r3, r3, #8
  8004730:	b21a      	sxth	r2, r3
@@ -10638,7 +10638,7 @@ void bme280GetCoefficients(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Dev
  800473c:	82da      	strh	r2, [r3, #22]
 
 	// Get pressure coefficients
-	HAL_GPIO_WritePin(sBme280Device->sSpiChipSelectPort, sBme280Device->ui16SpiChipSelectPin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(bme280Device->spiChipSelectPort, bme280Device->spiChipSelectPin, GPIO_PIN_RESET);
  800473e:	683b      	ldr	r3, [r7, #0]
  8004740:	6858      	ldr	r0, [r3, #4]
  8004742:	683b      	ldr	r3, [r7, #0]
@@ -10646,20 +10646,20 @@ void bme280GetCoefficients(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Dev
  8004746:	2200      	movs	r2, #0
  8004748:	4619      	mov	r1, r3
  800474a:	f7fd fc01 	bl	8001f50 <HAL_GPIO_WritePin>
-	HAL_SPI_Transmit(hspi, &sBme280Reg.ui8DigP1P9, sizeof(sBme280Reg.ui8DigP1P9), ui32TimeoutSpi);
+	HAL_SPI_Transmit(hspi, &bme280Reg.digP1P9, sizeof(bme280Reg.digP1P9), timeoutSpi);
  800474e:	2364      	movs	r3, #100	; 0x64
  8004750:	2201      	movs	r2, #1
  8004752:	496b      	ldr	r1, [pc, #428]	; (8004900 <bme280GetCoefficients+0x25c>)
  8004754:	6878      	ldr	r0, [r7, #4]
  8004756:	f7fe fa00 	bl	8002b5a <HAL_SPI_Transmit>
-	HAL_SPI_Receive(hspi, coefBytes, pressureCoefQtyBytes, ui32TimeoutSpi);
+	HAL_SPI_Receive(hspi, coefBytes, pressureCoefQtyBytes, timeoutSpi);
  800475a:	7fbb      	ldrb	r3, [r7, #30]
  800475c:	b29a      	uxth	r2, r3
  800475e:	2364      	movs	r3, #100	; 0x64
  8004760:	f107 0108 	add.w	r1, r7, #8
  8004764:	6878      	ldr	r0, [r7, #4]
  8004766:	f7fe fb34 	bl	8002dd2 <HAL_SPI_Receive>
-	HAL_GPIO_WritePin(sBme280Device->sSpiChipSelectPort, sBme280Device->ui16SpiChipSelectPin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(bme280Device->spiChipSelectPort, bme280Device->spiChipSelectPin, GPIO_PIN_SET);
  800476a:	683b      	ldr	r3, [r7, #0]
  800476c:	6858      	ldr	r0, [r3, #4]
  800476e:	683b      	ldr	r3, [r7, #0]
@@ -10667,7 +10667,7 @@ void bme280GetCoefficients(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Dev
  8004772:	2201      	movs	r2, #1
  8004774:	4619      	mov	r1, r3
  8004776:	f7fd fbeb 	bl	8001f50 <HAL_GPIO_WritePin>
-	sBme280Device->ui16DigP1 = (coefBytes[1] << 8) | coefBytes[0];
+	bme280Device->digP1 = (coefBytes[1] << 8) | coefBytes[0];
  800477a:	7a7b      	ldrb	r3, [r7, #9]
  800477c:	021b      	lsls	r3, r3, #8
  800477e:	b21a      	sxth	r2, r3
@@ -10678,7 +10678,7 @@ void bme280GetCoefficients(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Dev
  8004788:	b29a      	uxth	r2, r3
  800478a:	683b      	ldr	r3, [r7, #0]
  800478c:	831a      	strh	r2, [r3, #24]
-	sBme280Device->i16DigP2  = (coefBytes[3] << 8) | coefBytes[2];
+	bme280Device->digP2 = (coefBytes[3] << 8) | coefBytes[2];
  800478e:	7afb      	ldrb	r3, [r7, #11]
  8004790:	021b      	lsls	r3, r3, #8
  8004792:	b21a      	sxth	r2, r3
@@ -10688,7 +10688,7 @@ void bme280GetCoefficients(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Dev
  800479a:	b21a      	sxth	r2, r3
  800479c:	683b      	ldr	r3, [r7, #0]
  800479e:	835a      	strh	r2, [r3, #26]
-	sBme280Device->i16DigP3  = (coefBytes[5] << 8) | coefBytes[4];
+	bme280Device->digP3 = (coefBytes[5] << 8) | coefBytes[4];
  80047a0:	7b7b      	ldrb	r3, [r7, #13]
  80047a2:	021b      	lsls	r3, r3, #8
  80047a4:	b21a      	sxth	r2, r3
@@ -10698,7 +10698,7 @@ void bme280GetCoefficients(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Dev
  80047ac:	b21a      	sxth	r2, r3
  80047ae:	683b      	ldr	r3, [r7, #0]
  80047b0:	839a      	strh	r2, [r3, #28]
-	sBme280Device->i16DigP4  = (coefBytes[7] << 8) | coefBytes[6];
+	bme280Device->digP4 = (coefBytes[7] << 8) | coefBytes[6];
  80047b2:	7bfb      	ldrb	r3, [r7, #15]
  80047b4:	021b      	lsls	r3, r3, #8
  80047b6:	b21a      	sxth	r2, r3
@@ -10708,7 +10708,7 @@ void bme280GetCoefficients(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Dev
  80047be:	b21a      	sxth	r2, r3
  80047c0:	683b      	ldr	r3, [r7, #0]
  80047c2:	83da      	strh	r2, [r3, #30]
-	sBme280Device->i16DigP5  = (coefBytes[9] << 8) | coefBytes[8];
+	bme280Device->digP5 = (coefBytes[9] << 8) | coefBytes[8];
  80047c4:	7c7b      	ldrb	r3, [r7, #17]
  80047c6:	021b      	lsls	r3, r3, #8
  80047c8:	b21a      	sxth	r2, r3
@@ -10718,7 +10718,7 @@ void bme280GetCoefficients(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Dev
  80047d0:	b21a      	sxth	r2, r3
  80047d2:	683b      	ldr	r3, [r7, #0]
  80047d4:	841a      	strh	r2, [r3, #32]
-	sBme280Device->i16DigP6  = (coefBytes[11] << 8) | coefBytes[10];
+	bme280Device->digP6 = (coefBytes[11] << 8) | coefBytes[10];
  80047d6:	7cfb      	ldrb	r3, [r7, #19]
  80047d8:	021b      	lsls	r3, r3, #8
  80047da:	b21a      	sxth	r2, r3
@@ -10728,7 +10728,7 @@ void bme280GetCoefficients(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Dev
  80047e2:	b21a      	sxth	r2, r3
  80047e4:	683b      	ldr	r3, [r7, #0]
  80047e6:	845a      	strh	r2, [r3, #34]	; 0x22
-	sBme280Device->i16DigP7  = (coefBytes[13] << 8) | coefBytes[12];
+	bme280Device->digP7 = (coefBytes[13] << 8) | coefBytes[12];
  80047e8:	7d7b      	ldrb	r3, [r7, #21]
  80047ea:	021b      	lsls	r3, r3, #8
  80047ec:	b21a      	sxth	r2, r3
@@ -10738,7 +10738,7 @@ void bme280GetCoefficients(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Dev
  80047f4:	b21a      	sxth	r2, r3
  80047f6:	683b      	ldr	r3, [r7, #0]
  80047f8:	849a      	strh	r2, [r3, #36]	; 0x24
-	sBme280Device->i16DigP8  = (coefBytes[15] << 8) | coefBytes[14];
+	bme280Device->digP8 = (coefBytes[15] << 8) | coefBytes[14];
  80047fa:	7dfb      	ldrb	r3, [r7, #23]
  80047fc:	021b      	lsls	r3, r3, #8
  80047fe:	b21a      	sxth	r2, r3
@@ -10748,7 +10748,7 @@ void bme280GetCoefficients(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Dev
  8004806:	b21a      	sxth	r2, r3
  8004808:	683b      	ldr	r3, [r7, #0]
  800480a:	84da      	strh	r2, [r3, #38]	; 0x26
-	sBme280Device->i16DigP9  = (coefBytes[17] << 8) | coefBytes[16];
+	bme280Device->digP9 = (coefBytes[17] << 8) | coefBytes[16];
  800480c:	7e7b      	ldrb	r3, [r7, #25]
  800480e:	021b      	lsls	r3, r3, #8
  8004810:	b21a      	sxth	r2, r3
@@ -10760,7 +10760,7 @@ void bme280GetCoefficients(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Dev
  800481c:	851a      	strh	r2, [r3, #40]	; 0x28
 
 	// Get humidity coefficients
-	HAL_GPIO_WritePin(sBme280Device->sSpiChipSelectPort, sBme280Device->ui16SpiChipSelectPin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(bme280Device->spiChipSelectPort, bme280Device->spiChipSelectPin, GPIO_PIN_RESET);
  800481e:	683b      	ldr	r3, [r7, #0]
  8004820:	6858      	ldr	r0, [r3, #4]
  8004822:	683b      	ldr	r3, [r7, #0]
@@ -10768,19 +10768,19 @@ void bme280GetCoefficients(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Dev
  8004826:	2200      	movs	r2, #0
  8004828:	4619      	mov	r1, r3
  800482a:	f7fd fb91 	bl	8001f50 <HAL_GPIO_WritePin>
-	HAL_SPI_Transmit(hspi, &sBme280Reg.ui8DigH1, sizeof(sBme280Reg.ui8DigH1), ui32TimeoutSpi);
+	HAL_SPI_Transmit(hspi, &bme280Reg.digH1, sizeof(bme280Reg.digH1), timeoutSpi);
  800482e:	2364      	movs	r3, #100	; 0x64
  8004830:	2201      	movs	r2, #1
  8004832:	4934      	ldr	r1, [pc, #208]	; (8004904 <bme280GetCoefficients+0x260>)
  8004834:	6878      	ldr	r0, [r7, #4]
  8004836:	f7fe f990 	bl	8002b5a <HAL_SPI_Transmit>
-	HAL_SPI_Receive(hspi, coefBytes, 1, ui32TimeoutSpi);
+	HAL_SPI_Receive(hspi, coefBytes, 1, timeoutSpi);
  800483a:	2364      	movs	r3, #100	; 0x64
  800483c:	f107 0108 	add.w	r1, r7, #8
  8004840:	2201      	movs	r2, #1
  8004842:	6878      	ldr	r0, [r7, #4]
  8004844:	f7fe fac5 	bl	8002dd2 <HAL_SPI_Receive>
-	HAL_GPIO_WritePin(sBme280Device->sSpiChipSelectPort, sBme280Device->ui16SpiChipSelectPin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(bme280Device->spiChipSelectPort, bme280Device->spiChipSelectPin, GPIO_PIN_SET);
  8004848:	683b      	ldr	r3, [r7, #0]
  800484a:	6858      	ldr	r0, [r3, #4]
  800484c:	683b      	ldr	r3, [r7, #0]
@@ -10788,11 +10788,11 @@ void bme280GetCoefficients(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Dev
  8004850:	2201      	movs	r2, #1
  8004852:	4619      	mov	r1, r3
  8004854:	f7fd fb7c 	bl	8001f50 <HAL_GPIO_WritePin>
-	sBme280Device->ui8DigH1 = coefBytes[0];
+	bme280Device->digH1 = coefBytes[0];
  8004858:	7a3a      	ldrb	r2, [r7, #8]
  800485a:	683b      	ldr	r3, [r7, #0]
  800485c:	f883 202a 	strb.w	r2, [r3, #42]	; 0x2a
-	HAL_GPIO_WritePin(sBme280Device->sSpiChipSelectPort, sBme280Device->ui16SpiChipSelectPin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(bme280Device->spiChipSelectPort, bme280Device->spiChipSelectPin, GPIO_PIN_RESET);
  8004860:	683b      	ldr	r3, [r7, #0]
  8004862:	6858      	ldr	r0, [r3, #4]
  8004864:	683b      	ldr	r3, [r7, #0]
@@ -10800,20 +10800,20 @@ void bme280GetCoefficients(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Dev
  8004868:	2200      	movs	r2, #0
  800486a:	4619      	mov	r1, r3
  800486c:	f7fd fb70 	bl	8001f50 <HAL_GPIO_WritePin>
-	HAL_SPI_Transmit(hspi, &sBme280Reg.ui8DigH2H6, sizeof(sBme280Reg.ui8DigH2H6), ui32TimeoutSpi);
+	HAL_SPI_Transmit(hspi, &bme280Reg.digH2H6, sizeof(bme280Reg.digH2H6), timeoutSpi);
  8004870:	2364      	movs	r3, #100	; 0x64
  8004872:	2201      	movs	r2, #1
  8004874:	4924      	ldr	r1, [pc, #144]	; (8004908 <bme280GetCoefficients+0x264>)
  8004876:	6878      	ldr	r0, [r7, #4]
  8004878:	f7fe f96f 	bl	8002b5a <HAL_SPI_Transmit>
-	HAL_SPI_Receive(hspi, coefBytes, humidityCoefQtyBytes, ui32TimeoutSpi);
+	HAL_SPI_Receive(hspi, coefBytes, humidityCoefQtyBytes, timeoutSpi);
  800487c:	7f7b      	ldrb	r3, [r7, #29]
  800487e:	b29a      	uxth	r2, r3
  8004880:	2364      	movs	r3, #100	; 0x64
  8004882:	f107 0108 	add.w	r1, r7, #8
  8004886:	6878      	ldr	r0, [r7, #4]
  8004888:	f7fe faa3 	bl	8002dd2 <HAL_SPI_Receive>
-	HAL_GPIO_WritePin(sBme280Device->sSpiChipSelectPort, sBme280Device->ui16SpiChipSelectPin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(bme280Device->spiChipSelectPort, bme280Device->spiChipSelectPin, GPIO_PIN_SET);
  800488c:	683b      	ldr	r3, [r7, #0]
  800488e:	6858      	ldr	r0, [r3, #4]
  8004890:	683b      	ldr	r3, [r7, #0]
@@ -10821,7 +10821,7 @@ void bme280GetCoefficients(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Dev
  8004894:	2201      	movs	r2, #1
  8004896:	4619      	mov	r1, r3
  8004898:	f7fd fb5a 	bl	8001f50 <HAL_GPIO_WritePin>
-	sBme280Device->i16DigH2 = (coefBytes[1] << 8) | coefBytes[0];
+	bme280Device->digH2 = (coefBytes[1] << 8) | coefBytes[0];
  800489c:	7a7b      	ldrb	r3, [r7, #9]
  800489e:	021b      	lsls	r3, r3, #8
  80048a0:	b21a      	sxth	r2, r3
@@ -10831,11 +10831,11 @@ void bme280GetCoefficients(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Dev
  80048a8:	b21a      	sxth	r2, r3
  80048aa:	683b      	ldr	r3, [r7, #0]
  80048ac:	859a      	strh	r2, [r3, #44]	; 0x2c
-	sBme280Device->ui8DigH3 = coefBytes[2];
+	bme280Device->digH3 = coefBytes[2];
  80048ae:	7aba      	ldrb	r2, [r7, #10]
  80048b0:	683b      	ldr	r3, [r7, #0]
  80048b2:	f883 202e 	strb.w	r2, [r3, #46]	; 0x2e
-	sBme280Device->i16DigH4 = (coefBytes[3] << 4) | (coefBytes[4] & 0x0F);
+	bme280Device->digH4 = (coefBytes[3] << 4) | (coefBytes[4] & 0x0F);
  80048b6:	7afb      	ldrb	r3, [r7, #11]
  80048b8:	011b      	lsls	r3, r3, #4
  80048ba:	b21a      	sxth	r2, r3
@@ -10847,7 +10847,7 @@ void bme280GetCoefficients(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Dev
  80048c8:	b21a      	sxth	r2, r3
  80048ca:	683b      	ldr	r3, [r7, #0]
  80048cc:	861a      	strh	r2, [r3, #48]	; 0x30
-	sBme280Device->i16DigH5 = ((coefBytes[4] & 0xF0) >> 4) | (coefBytes[5] << 4);
+	bme280Device->digH5 = ((coefBytes[4] & 0xF0) >> 4) | (coefBytes[5] << 4);
  80048ce:	7b3b      	ldrb	r3, [r7, #12]
  80048d0:	091b      	lsrs	r3, r3, #4
  80048d2:	b2db      	uxtb	r3, r3
@@ -10859,7 +10859,7 @@ void bme280GetCoefficients(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Dev
  80048de:	b21a      	sxth	r2, r3
  80048e0:	683b      	ldr	r3, [r7, #0]
  80048e2:	865a      	strh	r2, [r3, #50]	; 0x32
-	sBme280Device->i8DigH6  = coefBytes[6];
+	bme280Device->digH6 = coefBytes[6];
  80048e4:	7bbb      	ldrb	r3, [r7, #14]
  80048e6:	b25a      	sxtb	r2, r3
  80048e8:	683b      	ldr	r3, [r7, #0]
@@ -10878,7 +10878,7 @@ void bme280GetCoefficients(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Dev
 
 0800490c <bme280CheckId>:
 
-uint8_t bme280CheckId(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device)
+uint8_t bme280CheckId(SPI_HandleTypeDef *hspi, Bme280DeviceData *bme280Device)
 {
  800490c:	b580      	push	{r7, lr}
  800490e:	b084      	sub	sp, #16
@@ -10889,7 +10889,7 @@ uint8_t bme280CheckId(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device)
  8004916:	2300      	movs	r3, #0
  8004918:	73fb      	strb	r3, [r7, #15]
 	
-	HAL_GPIO_WritePin(sBme280Device->sSpiChipSelectPort, sBme280Device->ui16SpiChipSelectPin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(bme280Device->spiChipSelectPort, bme280Device->spiChipSelectPin, GPIO_PIN_RESET);
  800491a:	683b      	ldr	r3, [r7, #0]
  800491c:	6858      	ldr	r0, [r3, #4]
  800491e:	683b      	ldr	r3, [r7, #0]
@@ -10897,19 +10897,19 @@ uint8_t bme280CheckId(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device)
  8004922:	2200      	movs	r2, #0
  8004924:	4619      	mov	r1, r3
  8004926:	f7fd fb13 	bl	8001f50 <HAL_GPIO_WritePin>
-	HAL_SPI_Transmit(hspi, &sBme280Reg.ui8Id, sizeof(sBme280Reg.ui8Id), ui32TimeoutSpi);
+	HAL_SPI_Transmit(hspi, &bme280Reg.id, sizeof(bme280Reg.id), timeoutSpi);
  800492a:	2364      	movs	r3, #100	; 0x64
  800492c:	2201      	movs	r2, #1
  800492e:	490c      	ldr	r1, [pc, #48]	; (8004960 <bme280CheckId+0x54>)
  8004930:	6878      	ldr	r0, [r7, #4]
  8004932:	f7fe f912 	bl	8002b5a <HAL_SPI_Transmit>
-	HAL_SPI_Receive(hspi, &id, sizeof(id), ui32TimeoutSpi);
+	HAL_SPI_Receive(hspi, &id, sizeof(id), timeoutSpi);
  8004936:	2364      	movs	r3, #100	; 0x64
  8004938:	f107 010f 	add.w	r1, r7, #15
  800493c:	2201      	movs	r2, #1
  800493e:	6878      	ldr	r0, [r7, #4]
  8004940:	f7fe fa47 	bl	8002dd2 <HAL_SPI_Receive>
-	HAL_GPIO_WritePin(sBme280Device->sSpiChipSelectPort, sBme280Device->ui16SpiChipSelectPin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(bme280Device->spiChipSelectPort, bme280Device->spiChipSelectPin, GPIO_PIN_SET);
  8004944:	683b      	ldr	r3, [r7, #0]
  8004946:	6858      	ldr	r0, [r3, #4]
  8004948:	683b      	ldr	r3, [r7, #0]
@@ -10929,11 +10929,11 @@ uint8_t bme280CheckId(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device)
  8004960:	2000035c 	.word	0x2000035c
 
 08004964 <bme280Control>:
-	HAL_SPI_Transmit(hspi, sBme280Reg.ui8Reset, sizeof(sBme280Reg.ui8Reset), ui32TimeoutSpi);
-	HAL_GPIO_WritePin(sBme280Device->sSpiChipSelectPort, sBme280Device->ui16SpiChipSelectPin, GPIO_PIN_SET);
+	HAL_SPI_Transmit(hspi, bme280Reg.reset, sizeof(bme280Reg.reset), timeoutSpi);
+	HAL_GPIO_WritePin(bme280Device->spiChipSelectPort, bme280Device->spiChipSelectPin, GPIO_PIN_SET);
 }
 
-void bme280Control(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device, Oversampling hum, Oversampling press, Oversampling temp, Mode mode)
+void bme280Control(SPI_HandleTypeDef *hspi, Bme280DeviceData *bme280Device, Oversampling hum, Oversampling press, Oversampling temp, Mode mode)
 {
  8004964:	b580      	push	{r7, lr}
  8004966:	b088      	sub	sp, #32
@@ -10965,7 +10965,7 @@ void bme280Control(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device, Ove
 
 	uint8_t ctrl_hum[2] =
 	{
-			sBme280Reg.ui8CtrlHum,
+			bme280Reg.ctrlHum,
  800499e:	4b24      	ldr	r3, [pc, #144]	; (8004a30 <bme280Control+0xcc>)
  80049a0:	78db      	ldrb	r3, [r3, #3]
 	uint8_t ctrl_hum[2] =
@@ -10977,7 +10977,7 @@ void bme280Control(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device, Ove
 
 	uint8_t ctrl_meas[2] =
 	{
-			sBme280Reg.ui8CtrlMeas,
+			bme280Reg.ctrlMeas,
  80049a8:	4b21      	ldr	r3, [pc, #132]	; (8004a30 <bme280Control+0xcc>)
  80049aa:	795b      	ldrb	r3, [r3, #5]
 	uint8_t ctrl_meas[2] =
@@ -10999,7 +10999,7 @@ void bme280Control(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device, Ove
  80049c8:	757b      	strb	r3, [r7, #21]
 	};
 
-	HAL_GPIO_WritePin(sBme280Device->sSpiChipSelectPort, sBme280Device->ui16SpiChipSelectPin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(bme280Device->spiChipSelectPort, bme280Device->spiChipSelectPin, GPIO_PIN_RESET);
  80049ca:	68bb      	ldr	r3, [r7, #8]
  80049cc:	6858      	ldr	r0, [r3, #4]
  80049ce:	68bb      	ldr	r3, [r7, #8]
@@ -11007,13 +11007,13 @@ void bme280Control(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device, Ove
  80049d2:	2200      	movs	r2, #0
  80049d4:	4619      	mov	r1, r3
  80049d6:	f7fd fabb 	bl	8001f50 <HAL_GPIO_WritePin>
-	HAL_SPI_Transmit(hspi, ctrl_hum, sizeof(ctrl_hum), ui32TimeoutSpi);
+	HAL_SPI_Transmit(hspi, ctrl_hum, sizeof(ctrl_hum), timeoutSpi);
  80049da:	2364      	movs	r3, #100	; 0x64
  80049dc:	f107 0118 	add.w	r1, r7, #24
  80049e0:	2202      	movs	r2, #2
  80049e2:	68f8      	ldr	r0, [r7, #12]
  80049e4:	f7fe f8b9 	bl	8002b5a <HAL_SPI_Transmit>
-	HAL_GPIO_WritePin(sBme280Device->sSpiChipSelectPort, sBme280Device->ui16SpiChipSelectPin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(bme280Device->spiChipSelectPort, bme280Device->spiChipSelectPin, GPIO_PIN_SET);
  80049e8:	68bb      	ldr	r3, [r7, #8]
  80049ea:	6858      	ldr	r0, [r3, #4]
  80049ec:	68bb      	ldr	r3, [r7, #8]
@@ -11022,7 +11022,7 @@ void bme280Control(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device, Ove
  80049f2:	4619      	mov	r1, r3
  80049f4:	f7fd faac 	bl	8001f50 <HAL_GPIO_WritePin>
 	
-	HAL_GPIO_WritePin(sBme280Device->sSpiChipSelectPort, sBme280Device->ui16SpiChipSelectPin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(bme280Device->spiChipSelectPort, bme280Device->spiChipSelectPin, GPIO_PIN_RESET);
  80049f8:	68bb      	ldr	r3, [r7, #8]
  80049fa:	6858      	ldr	r0, [r3, #4]
  80049fc:	68bb      	ldr	r3, [r7, #8]
@@ -11030,13 +11030,13 @@ void bme280Control(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device, Ove
  8004a00:	2200      	movs	r2, #0
  8004a02:	4619      	mov	r1, r3
  8004a04:	f7fd faa4 	bl	8001f50 <HAL_GPIO_WritePin>
-	HAL_SPI_Transmit(hspi, ctrl_meas, sizeof(ctrl_meas), ui32TimeoutSpi);
+	HAL_SPI_Transmit(hspi, ctrl_meas, sizeof(ctrl_meas), timeoutSpi);
  8004a08:	2364      	movs	r3, #100	; 0x64
  8004a0a:	f107 0114 	add.w	r1, r7, #20
  8004a0e:	2202      	movs	r2, #2
  8004a10:	68f8      	ldr	r0, [r7, #12]
  8004a12:	f7fe f8a2 	bl	8002b5a <HAL_SPI_Transmit>
-	HAL_GPIO_WritePin(sBme280Device->sSpiChipSelectPort, sBme280Device->ui16SpiChipSelectPin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(bme280Device->spiChipSelectPort, bme280Device->spiChipSelectPin, GPIO_PIN_SET);
  8004a16:	68bb      	ldr	r3, [r7, #8]
  8004a18:	6858      	ldr	r0, [r3, #4]
  8004a1a:	68bb      	ldr	r3, [r7, #8]
@@ -11054,7 +11054,7 @@ void bme280Control(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device, Ove
 
 08004a34 <bme280GetStatus>:
 
-MeasuringStatus bme280GetStatus(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device)
+MeasuringStatus bme280GetStatus(SPI_HandleTypeDef *hspi, Bme280DeviceData *bme280Device)
 {
  8004a34:	b580      	push	{r7, lr}
  8004a36:	b084      	sub	sp, #16
@@ -11064,7 +11064,7 @@ MeasuringStatus bme280GetStatus(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme2
 	MeasuringStatus status = AVAILABLE;
  8004a3e:	2300      	movs	r3, #0
  8004a40:	73fb      	strb	r3, [r7, #15]
-	HAL_GPIO_WritePin(sBme280Device->sSpiChipSelectPort, sBme280Device->ui16SpiChipSelectPin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(bme280Device->spiChipSelectPort, bme280Device->spiChipSelectPin, GPIO_PIN_RESET);
  8004a42:	683b      	ldr	r3, [r7, #0]
  8004a44:	6858      	ldr	r0, [r3, #4]
  8004a46:	683b      	ldr	r3, [r7, #0]
@@ -11072,19 +11072,19 @@ MeasuringStatus bme280GetStatus(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme2
  8004a4a:	2200      	movs	r2, #0
  8004a4c:	4619      	mov	r1, r3
  8004a4e:	f7fd fa7f 	bl	8001f50 <HAL_GPIO_WritePin>
-	HAL_SPI_Transmit(hspi, &sBme280Reg.ui8Status, sizeof(sBme280Reg.ui8Status), ui32TimeoutSpi);
+	HAL_SPI_Transmit(hspi, &bme280Reg.status, sizeof(bme280Reg.status), timeoutSpi);
  8004a52:	2364      	movs	r3, #100	; 0x64
  8004a54:	2201      	movs	r2, #1
  8004a56:	490c      	ldr	r1, [pc, #48]	; (8004a88 <bme280GetStatus+0x54>)
  8004a58:	6878      	ldr	r0, [r7, #4]
  8004a5a:	f7fe f87e 	bl	8002b5a <HAL_SPI_Transmit>
-	HAL_SPI_Receive(hspi, &status, sizeof(status), ui32TimeoutSpi);
+	HAL_SPI_Receive(hspi, &status, sizeof(status), timeoutSpi);
  8004a5e:	2364      	movs	r3, #100	; 0x64
  8004a60:	f107 010f 	add.w	r1, r7, #15
  8004a64:	2201      	movs	r2, #1
  8004a66:	6878      	ldr	r0, [r7, #4]
  8004a68:	f7fe f9b3 	bl	8002dd2 <HAL_SPI_Receive>
-	HAL_GPIO_WritePin(sBme280Device->sSpiChipSelectPort, sBme280Device->ui16SpiChipSelectPin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(bme280Device->spiChipSelectPort, bme280Device->spiChipSelectPin, GPIO_PIN_SET);
  8004a6c:	683b      	ldr	r3, [r7, #0]
  8004a6e:	6858      	ldr	r0, [r3, #4]
  8004a70:	683b      	ldr	r3, [r7, #0]
@@ -11104,7 +11104,7 @@ MeasuringStatus bme280GetStatus(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme2
 
 08004a8c <bme280Config>:
 
-void bme280Config(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device, TimeStandby timeStandby, FilterCoef filterCoef)
+void bme280Config(SPI_HandleTypeDef *hspi, Bme280DeviceData *bme280Device, TimeStandby timeStandby, FilterCoef filterCoef)
 {
  8004a8c:	b580      	push	{r7, lr}
  8004a8e:	b088      	sub	sp, #32
@@ -11131,7 +11131,7 @@ void bme280Config(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device, Time
 
 	uint8_t config[2] =
 	{
-			sBme280Reg.ui8Config,
+			bme280Reg.config,
  8004ab6:	4b1b      	ldr	r3, [pc, #108]	; (8004b24 <bme280Config+0x98>)
  8004ab8:	799b      	ldrb	r3, [r3, #6]
 	uint8_t config[2] =
@@ -11153,7 +11153,7 @@ void bme280Config(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device, Time
  8004ad6:	747b      	strb	r3, [r7, #17]
 	};
 
-	bme280Control(hspi, sBme280Device, OVER_SKIPPED, OVER_SKIPPED, OVER_SKIPPED, SLEEP);
+	bme280Control(hspi, bme280Device, OVER_SKIPPED, OVER_SKIPPED, OVER_SKIPPED, SLEEP);
  8004ad8:	2300      	movs	r3, #0
  8004ada:	9301      	str	r3, [sp, #4]
  8004adc:	2300      	movs	r3, #0
@@ -11164,7 +11164,7 @@ void bme280Config(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device, Time
  8004ae6:	68f8      	ldr	r0, [r7, #12]
  8004ae8:	f7ff ff3c 	bl	8004964 <bme280Control>
 	
-	HAL_GPIO_WritePin(sBme280Device->sSpiChipSelectPort, sBme280Device->ui16SpiChipSelectPin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(bme280Device->spiChipSelectPort, bme280Device->spiChipSelectPin, GPIO_PIN_RESET);
  8004aec:	68bb      	ldr	r3, [r7, #8]
  8004aee:	6858      	ldr	r0, [r3, #4]
  8004af0:	68bb      	ldr	r3, [r7, #8]
@@ -11172,13 +11172,13 @@ void bme280Config(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device, Time
  8004af4:	2200      	movs	r2, #0
  8004af6:	4619      	mov	r1, r3
  8004af8:	f7fd fa2a 	bl	8001f50 <HAL_GPIO_WritePin>
-	HAL_SPI_Transmit(hspi, config, sizeof(config), ui32TimeoutSpi);
+	HAL_SPI_Transmit(hspi, config, sizeof(config), timeoutSpi);
  8004afc:	2364      	movs	r3, #100	; 0x64
  8004afe:	f107 0110 	add.w	r1, r7, #16
  8004b02:	2202      	movs	r2, #2
  8004b04:	68f8      	ldr	r0, [r7, #12]
  8004b06:	f7fe f828 	bl	8002b5a <HAL_SPI_Transmit>
-	HAL_GPIO_WritePin(sBme280Device->sSpiChipSelectPort, sBme280Device->ui16SpiChipSelectPin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(bme280Device->spiChipSelectPort, bme280Device->spiChipSelectPin, GPIO_PIN_SET);
  8004b0a:	68bb      	ldr	r3, [r7, #8]
  8004b0c:	6858      	ldr	r0, [r3, #4]
  8004b0e:	68bb      	ldr	r3, [r7, #8]
@@ -11199,7 +11199,7 @@ void bme280Config(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device, Time
  * Returns temperature in degC.
  * Output value of "5123" equals 51.23 degC
  */
-int32_t bme280ReadTemperature(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device)
+int32_t bme280ReadTemperature(SPI_HandleTypeDef *hspi, Bme280DeviceData *bme280Device)
 {
  8004b28:	b580      	push	{r7, lr}
  8004b2a:	b088      	sub	sp, #32
@@ -11222,7 +11222,7 @@ int32_t bme280ReadTemperature(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280
  8004b48:	0c12      	lsrs	r2, r2, #16
  8004b4a:	701a      	strb	r2, [r3, #0]
 
-	HAL_GPIO_WritePin(sBme280Device->sSpiChipSelectPort, sBme280Device->ui16SpiChipSelectPin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(bme280Device->spiChipSelectPort, bme280Device->spiChipSelectPin, GPIO_PIN_RESET);
  8004b4c:	683b      	ldr	r3, [r7, #0]
  8004b4e:	6858      	ldr	r0, [r3, #4]
  8004b50:	683b      	ldr	r3, [r7, #0]
@@ -11230,20 +11230,20 @@ int32_t bme280ReadTemperature(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280
  8004b54:	2200      	movs	r2, #0
  8004b56:	4619      	mov	r1, r3
  8004b58:	f7fd f9fa 	bl	8001f50 <HAL_GPIO_WritePin>
-	HAL_SPI_Transmit(hspi, &sBme280Reg.ui8Temp, sizeof(sBme280Reg.ui8Temp), ui32TimeoutSpi);
+	HAL_SPI_Transmit(hspi, &bme280Reg.temp, sizeof(bme280Reg.temp), timeoutSpi);
  8004b5c:	2364      	movs	r3, #100	; 0x64
  8004b5e:	2201      	movs	r2, #1
  8004b60:	4931      	ldr	r1, [pc, #196]	; (8004c28 <bme280ReadTemperature+0x100>)
  8004b62:	6878      	ldr	r0, [r7, #4]
  8004b64:	f7fd fff9 	bl	8002b5a <HAL_SPI_Transmit>
-	HAL_SPI_Receive(hspi, dataBytes, temperatureDataQtyBytes, ui32TimeoutSpi);
+	HAL_SPI_Receive(hspi, dataBytes, temperatureDataQtyBytes, timeoutSpi);
  8004b68:	f997 301b 	ldrsb.w	r3, [r7, #27]
  8004b6c:	b29a      	uxth	r2, r3
  8004b6e:	2364      	movs	r3, #100	; 0x64
  8004b70:	f107 0108 	add.w	r1, r7, #8
  8004b74:	6878      	ldr	r0, [r7, #4]
  8004b76:	f7fe f92c 	bl	8002dd2 <HAL_SPI_Receive>
-	HAL_GPIO_WritePin(sBme280Device->sSpiChipSelectPort, sBme280Device->ui16SpiChipSelectPin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(bme280Device->spiChipSelectPort, bme280Device->spiChipSelectPin, GPIO_PIN_SET);
  8004b7a:	683b      	ldr	r3, [r7, #0]
  8004b7c:	6858      	ldr	r0, [r3, #4]
  8004b7e:	683b      	ldr	r3, [r7, #0]
@@ -11251,20 +11251,20 @@ int32_t bme280ReadTemperature(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280
  8004b82:	2201      	movs	r2, #1
  8004b84:	4619      	mov	r1, r3
  8004b86:	f7fd f9e3 	bl	8001f50 <HAL_GPIO_WritePin>
-	sBme280Device->ui8TempMsb = dataBytes[0];
+	bme280Device->tempMsb = dataBytes[0];
  8004b8a:	7a3a      	ldrb	r2, [r7, #8]
  8004b8c:	683b      	ldr	r3, [r7, #0]
  8004b8e:	735a      	strb	r2, [r3, #13]
-	sBme280Device->ui8TempLsb = dataBytes[1];
+	bme280Device->tempLsb = dataBytes[1];
  8004b90:	7a7a      	ldrb	r2, [r7, #9]
  8004b92:	683b      	ldr	r3, [r7, #0]
  8004b94:	739a      	strb	r2, [r3, #14]
-	sBme280Device->ui8TempXlsb = dataBytes[2];
+	bme280Device->tempXlsb = dataBytes[2];
  8004b96:	7aba      	ldrb	r2, [r7, #10]
  8004b98:	683b      	ldr	r3, [r7, #0]
  8004b9a:	73da      	strb	r2, [r3, #15]
 
-	int32_t adc_T = (sBme280Device->ui8TempMsb << 12) | (sBme280Device->ui8TempLsb << 4) | (sBme280Device->ui8TempXlsb >> 4);
+	int32_t adc_T = (bme280Device->tempMsb << 12) | (bme280Device->tempLsb << 4) | (bme280Device->tempXlsb >> 4);
  8004b9c:	683b      	ldr	r3, [r7, #0]
  8004b9e:	7b5b      	ldrb	r3, [r3, #13]
  8004ba0:	031a      	lsls	r2, r3, #12
@@ -11278,7 +11278,7 @@ int32_t bme280ReadTemperature(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280
  8004bb0:	b2d2      	uxtb	r2, r2
  8004bb2:	4313      	orrs	r3, r2
  8004bb4:	617b      	str	r3, [r7, #20]
-	int32_t var1 = ((((adc_T >> 3) - ((int32_t) sBme280Device->ui16DigT1 << 1))) * ((int32_t) sBme280Device->i16DigT2)) >> 11;
+	int32_t var1 = ((((adc_T >> 3) - ((int32_t) bme280Device->digT1 << 1))) * ((int32_t) bme280Device->digT2)) >> 11;
  8004bb6:	697b      	ldr	r3, [r7, #20]
  8004bb8:	10da      	asrs	r2, r3, #3
  8004bba:	683b      	ldr	r3, [r7, #0]
@@ -11290,7 +11290,7 @@ int32_t bme280ReadTemperature(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280
  8004bc8:	fb02 f303 	mul.w	r3, r2, r3
  8004bcc:	12db      	asrs	r3, r3, #11
  8004bce:	613b      	str	r3, [r7, #16]
-	int32_t var2 = (((((adc_T >> 4) - ((int32_t) sBme280Device->ui16DigT1)) * ((adc_T >> 4) - ((int32_t) sBme280Device->ui16DigT1))) >> 12) * ((int32_t) sBme280Device->i16DigT3)) >> 14;
+	int32_t var2 = (((((adc_T >> 4) - ((int32_t) bme280Device->digT1)) * ((adc_T >> 4) - ((int32_t) bme280Device->digT1))) >> 12) * ((int32_t) bme280Device->digT3)) >> 14;
  8004bd0:	697b      	ldr	r3, [r7, #20]
  8004bd2:	111b      	asrs	r3, r3, #4
  8004bd4:	683a      	ldr	r2, [r7, #0]
@@ -11308,13 +11308,13 @@ int32_t bme280ReadTemperature(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280
  8004bf0:	fb02 f303 	mul.w	r3, r2, r3
  8004bf4:	139b      	asrs	r3, r3, #14
  8004bf6:	60fb      	str	r3, [r7, #12]
-	i32FineTemperature = var1 + var2;
+	fineTemperature = var1 + var2;
  8004bf8:	693a      	ldr	r2, [r7, #16]
  8004bfa:	68fb      	ldr	r3, [r7, #12]
  8004bfc:	4413      	add	r3, r2
  8004bfe:	4a0b      	ldr	r2, [pc, #44]	; (8004c2c <bme280ReadTemperature+0x104>)
  8004c00:	6013      	str	r3, [r2, #0]
-	sBme280Device->i32Temperature = (i32FineTemperature * 5 + 128) >> 8;
+	bme280Device->temperature = (fineTemperature * 5 + 128) >> 8;
  8004c02:	4b0a      	ldr	r3, [pc, #40]	; (8004c2c <bme280ReadTemperature+0x104>)
  8004c04:	681a      	ldr	r2, [r3, #0]
  8004c06:	4613      	mov	r3, r2
@@ -11324,7 +11324,7 @@ int32_t bme280ReadTemperature(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280
  8004c0e:	121a      	asrs	r2, r3, #8
  8004c10:	683b      	ldr	r3, [r7, #0]
  8004c12:	639a      	str	r2, [r3, #56]	; 0x38
-	temperature_degC_x_100 = sBme280Device->i32Temperature;
+	temperature_degC_x_100 = bme280Device->temperature;
  8004c14:	683b      	ldr	r3, [r7, #0]
  8004c16:	6b9b      	ldr	r3, [r3, #56]	; 0x38
  8004c18:	61fb      	str	r3, [r7, #28]
@@ -11345,7 +11345,7 @@ int32_t bme280ReadTemperature(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280
 /**
  * Returns pressure in Pa
  */
-uint32_t bme280ReadPressure(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device)
+uint32_t bme280ReadPressure(SPI_HandleTypeDef *hspi, Bme280DeviceData *bme280Device)
 {
  8004c30:	e92d 4fb0 	stmdb	sp!, {r4, r5, r7, r8, r9, sl, fp, lr}
  8004c34:	b0d2      	sub	sp, #328	; 0x148
@@ -11368,7 +11368,7 @@ uint32_t bme280ReadPressure(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280De
  8004c5a:	0c0b      	lsrs	r3, r1, #16
  8004c5c:	7013      	strb	r3, [r2, #0]
 
-	HAL_GPIO_WritePin(sBme280Device->sSpiChipSelectPort, sBme280Device->ui16SpiChipSelectPin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(bme280Device->spiChipSelectPort, bme280Device->spiChipSelectPin, GPIO_PIN_RESET);
  8004c5e:	f8d7 3110 	ldr.w	r3, [r7, #272]	; 0x110
  8004c62:	6858      	ldr	r0, [r3, #4]
  8004c64:	f8d7 3110 	ldr.w	r3, [r7, #272]	; 0x110
@@ -11376,20 +11376,20 @@ uint32_t bme280ReadPressure(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280De
  8004c6a:	2200      	movs	r2, #0
  8004c6c:	4619      	mov	r1, r3
  8004c6e:	f7fd f96f 	bl	8001f50 <HAL_GPIO_WritePin>
-	HAL_SPI_Transmit(hspi, &sBme280Reg.ui8Press, sizeof(sBme280Reg.ui8Press), ui32TimeoutSpi);
+	HAL_SPI_Transmit(hspi, &bme280Reg.press, sizeof(bme280Reg.press), timeoutSpi);
  8004c72:	2364      	movs	r3, #100	; 0x64
  8004c74:	2201      	movs	r2, #1
  8004c76:	49cc      	ldr	r1, [pc, #816]	; (8004fa8 <bme280ReadPressure+0x378>)
  8004c78:	f8d7 0114 	ldr.w	r0, [r7, #276]	; 0x114
  8004c7c:	f7fd ff6d 	bl	8002b5a <HAL_SPI_Transmit>
-	HAL_SPI_Receive(hspi, dataBytes, pressureDataQtyBytes, ui32TimeoutSpi);
+	HAL_SPI_Receive(hspi, dataBytes, pressureDataQtyBytes, timeoutSpi);
  8004c80:	f997 3143 	ldrsb.w	r3, [r7, #323]	; 0x143
  8004c84:	b29a      	uxth	r2, r3
  8004c86:	2364      	movs	r3, #100	; 0x64
  8004c88:	f507 718e 	add.w	r1, r7, #284	; 0x11c
  8004c8c:	f8d7 0114 	ldr.w	r0, [r7, #276]	; 0x114
  8004c90:	f7fe f89f 	bl	8002dd2 <HAL_SPI_Receive>
-	HAL_GPIO_WritePin(sBme280Device->sSpiChipSelectPort, sBme280Device->ui16SpiChipSelectPin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(bme280Device->spiChipSelectPort, bme280Device->spiChipSelectPin, GPIO_PIN_SET);
  8004c94:	f8d7 3110 	ldr.w	r3, [r7, #272]	; 0x110
  8004c98:	6858      	ldr	r0, [r3, #4]
  8004c9a:	f8d7 3110 	ldr.w	r3, [r7, #272]	; 0x110
@@ -11397,20 +11397,20 @@ uint32_t bme280ReadPressure(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280De
  8004ca0:	2201      	movs	r2, #1
  8004ca2:	4619      	mov	r1, r3
  8004ca4:	f7fd f954 	bl	8001f50 <HAL_GPIO_WritePin>
-	sBme280Device->ui8PressMsb = dataBytes[0];
+	bme280Device->pressMsb = dataBytes[0];
  8004ca8:	f897 311c 	ldrb.w	r3, [r7, #284]	; 0x11c
  8004cac:	f8d7 2110 	ldr.w	r2, [r7, #272]	; 0x110
  8004cb0:	7293      	strb	r3, [r2, #10]
-	sBme280Device->ui8PressLsb = dataBytes[1];
+	bme280Device->pressLsb = dataBytes[1];
  8004cb2:	f897 311d 	ldrb.w	r3, [r7, #285]	; 0x11d
  8004cb6:	f8d7 2110 	ldr.w	r2, [r7, #272]	; 0x110
  8004cba:	72d3      	strb	r3, [r2, #11]
-	sBme280Device->ui8PressXlsb = dataBytes[2];
+	bme280Device->pressXlsb = dataBytes[2];
  8004cbc:	f897 311e 	ldrb.w	r3, [r7, #286]	; 0x11e
  8004cc0:	f8d7 2110 	ldr.w	r2, [r7, #272]	; 0x110
  8004cc4:	7313      	strb	r3, [r2, #12]
 
-	int32_t adc_P = (sBme280Device->ui8PressMsb << 12) | (sBme280Device->ui8PressLsb << 4) | (sBme280Device->ui8PressXlsb >> 4);
+	int32_t adc_P = (bme280Device->pressMsb << 12) | (bme280Device->pressLsb << 4) | (bme280Device->pressXlsb >> 4);
  8004cc6:	f8d7 3110 	ldr.w	r3, [r7, #272]	; 0x110
  8004cca:	7a9b      	ldrb	r3, [r3, #10]
  8004ccc:	031a      	lsls	r2, r3, #12
@@ -11424,11 +11424,11 @@ uint32_t bme280ReadPressure(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280De
  8004ce0:	b2db      	uxtb	r3, r3
  8004ce2:	4313      	orrs	r3, r2
  8004ce4:	f8c7 313c 	str.w	r3, [r7, #316]	; 0x13c
-	bme280ReadTemperature(hspi, sBme280Device);
+	bme280ReadTemperature(hspi, bme280Device);
  8004ce8:	f8d7 1110 	ldr.w	r1, [r7, #272]	; 0x110
  8004cec:	f8d7 0114 	ldr.w	r0, [r7, #276]	; 0x114
  8004cf0:	f7ff ff1a 	bl	8004b28 <bme280ReadTemperature>
-	int64_t var1 = ((int64_t) i32FineTemperature) - 128000;
+	int64_t var1 = ((int64_t) fineTemperature) - 128000;
  8004cf4:	4bad      	ldr	r3, [pc, #692]	; (8004fac <bme280ReadPressure+0x37c>)
  8004cf6:	681b      	ldr	r3, [r3, #0]
  8004cf8:	17da      	asrs	r2, r3, #31
@@ -11443,7 +11443,7 @@ uint32_t bme280ReadPressure(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280De
  8004d14:	657b      	str	r3, [r7, #84]	; 0x54
  8004d16:	e9d7 2314 	ldrd	r2, r3, [r7, #80]	; 0x50
  8004d1a:	e9c7 234c 	strd	r2, r3, [r7, #304]	; 0x130
-	int64_t var2 = var1 * var1 * (int64_t) sBme280Device->i16DigP6;
+	int64_t var2 = var1 * var1 * (int64_t) bme280Device->digP6;
  8004d1e:	f8d7 2134 	ldr.w	r2, [r7, #308]	; 0x134
  8004d22:	f8d7 3130 	ldr.w	r3, [r7, #304]	; 0x130
  8004d26:	fb03 f102 	mul.w	r1, r3, r2
@@ -11478,7 +11478,7 @@ uint32_t bme280ReadPressure(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280De
  8004d84:	e9d7 3436 	ldrd	r3, r4, [r7, #216]	; 0xd8
  8004d88:	e9c7 344a 	strd	r3, r4, [r7, #296]	; 0x128
  8004d8c:	e9c7 344a 	strd	r3, r4, [r7, #296]	; 0x128
-	var2 = var2 + ((var1 * (int64_t) sBme280Device->i16DigP5) << 17);
+	var2 = var2 + ((var1 * (int64_t) bme280Device->digP5) << 17);
  8004d90:	f8d7 3110 	ldr.w	r3, [r7, #272]	; 0x110
  8004d94:	f9b3 3020 	ldrsh.w	r3, [r3, #32]
  8004d98:	b21b      	sxth	r3, r3
@@ -11510,7 +11510,7 @@ uint32_t bme280ReadPressure(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280De
  8004dec:	64fb      	str	r3, [r7, #76]	; 0x4c
  8004dee:	e9d7 3412 	ldrd	r3, r4, [r7, #72]	; 0x48
  8004df2:	e9c7 344a 	strd	r3, r4, [r7, #296]	; 0x128
-	var2 = var2 + (((int64_t) sBme280Device->i16DigP4) << 35);
+	var2 = var2 + (((int64_t) bme280Device->digP4) << 35);
  8004df6:	f8d7 3110 	ldr.w	r3, [r7, #272]	; 0x110
  8004dfa:	f9b3 301e 	ldrsh.w	r3, [r3, #30]
  8004dfe:	b21b      	sxth	r3, r3
@@ -11529,7 +11529,7 @@ uint32_t bme280ReadPressure(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280De
  8004e24:	647b      	str	r3, [r7, #68]	; 0x44
  8004e26:	e9d7 3410 	ldrd	r3, r4, [r7, #64]	; 0x40
  8004e2a:	e9c7 344a 	strd	r3, r4, [r7, #296]	; 0x128
-	var1 = ((var1 * var1 * (int64_t) sBme280Device->i16DigP3) >> 8) + ((var1 * (int64_t) sBme280Device->i16DigP2) << 12);
+	var1 = ((var1 * var1 * (int64_t) bme280Device->digP3) >> 8) + ((var1 * (int64_t) bme280Device->digP2) << 12);
  8004e2e:	f8d7 2134 	ldr.w	r2, [r7, #308]	; 0x134
  8004e32:	f8d7 3130 	ldr.w	r3, [r7, #304]	; 0x130
  8004e36:	fb03 f102 	mul.w	r1, r3, r2
@@ -11608,7 +11608,7 @@ uint32_t bme280ReadPressure(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280De
  8004f1e:	63fb      	str	r3, [r7, #60]	; 0x3c
  8004f20:	e9d7 340e 	ldrd	r3, r4, [r7, #56]	; 0x38
  8004f24:	e9c7 344c 	strd	r3, r4, [r7, #304]	; 0x130
-	var1 = (((((int64_t) 1) << 47) + var1)) * ((int64_t) sBme280Device->ui16DigP1) >> 33;
+	var1 = (((((int64_t) 1) << 47) + var1)) * ((int64_t) bme280Device->digP1) >> 33;
  8004f28:	e9d7 234c 	ldrd	r2, r3, [r7, #304]	; 0x130
  8004f2c:	f503 4100 	add.w	r1, r3, #32768	; 0x8000
  8004f30:	f8c7 10a4 	str.w	r1, [r7, #164]	; 0xa4
@@ -11750,7 +11750,7 @@ uint32_t bme280ReadPressure(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280De
  80050ac:	4602      	mov	r2, r0
  80050ae:	460b      	mov	r3, r1
  80050b0:	e9c7 2348 	strd	r2, r3, [r7, #288]	; 0x120
-	var1 = (((int64_t) sBme280Device->i16DigP9) * (p_aux >> 13) * (p_aux >> 13)) >> 25;
+	var1 = (((int64_t) bme280Device->digP9) * (p_aux >> 13) * (p_aux >> 13)) >> 25;
  80050b4:	f8d7 3110 	ldr.w	r3, [r7, #272]	; 0x110
  80050b8:	f9b3 3028 	ldrsh.w	r3, [r3, #40]	; 0x28
  80050bc:	b21b      	sxth	r3, r3
@@ -11807,7 +11807,7 @@ uint32_t bme280ReadPressure(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280De
  800515a:	4629      	mov	r1, r5
  800515c:	164b      	asrs	r3, r1, #25
  800515e:	e9c7 234c 	strd	r2, r3, [r7, #304]	; 0x130
-	var2 = (((int64_t) sBme280Device->i16DigP8) * p_aux) >> 19;
+	var2 = (((int64_t) bme280Device->digP8) * p_aux) >> 19;
  8005162:	f8d7 3110 	ldr.w	r3, [r7, #272]	; 0x110
  8005166:	f9b3 3026 	ldrsh.w	r3, [r3, #38]	; 0x26
  800516a:	b21b      	sxth	r3, r3
@@ -11841,7 +11841,7 @@ uint32_t bme280ReadPressure(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280De
  80051c0:	4629      	mov	r1, r5
  80051c2:	14cb      	asrs	r3, r1, #19
  80051c4:	e9c7 234a 	strd	r2, r3, [r7, #296]	; 0x128
-	p_aux = ((p_aux + var1 + var2) >> 8) + (((int64_t) sBme280Device->i16DigP7) << 4);
+	p_aux = ((p_aux + var1 + var2) >> 8) + (((int64_t) bme280Device->digP7) << 4);
  80051c8:	e9d7 0148 	ldrd	r0, r1, [r7, #288]	; 0x120
  80051cc:	e9d7 234c 	ldrd	r2, r3, [r7, #304]	; 0x130
  80051d0:	1884      	adds	r4, r0, r2
@@ -11904,12 +11904,12 @@ uint32_t bme280ReadPressure(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280De
  8005270:	460b      	mov	r3, r1
  8005272:	4613      	mov	r3, r2
  8005274:	f8c7 3144 	str.w	r3, [r7, #324]	; 0x144
-	sBme280Device->ui32Pressure = pressure_Pa;
+	bme280Device->pressure = pressure_Pa;
  8005278:	f8d7 3110 	ldr.w	r3, [r7, #272]	; 0x110
  800527c:	f8d7 2144 	ldr.w	r2, [r7, #324]	; 0x144
  8005280:	63da      	str	r2, [r3, #60]	; 0x3c
 
-	return sBme280Device->ui32Pressure;
+	return bme280Device->pressure;
  8005282:	f8d7 3110 	ldr.w	r3, [r7, #272]	; 0x110
  8005286:	6bdb      	ldr	r3, [r3, #60]	; 0x3c
 }
@@ -11923,7 +11923,7 @@ uint32_t bme280ReadPressure(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280De
 /**
  * Returns humidity in %RH
  */
-uint32_t bme280ReadHumidity(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280Device)
+uint32_t bme280ReadHumidity(SPI_HandleTypeDef *hspi, Bme280DeviceData *bme280Device)
 {
  8005294:	b580      	push	{r7, lr}
  8005296:	b088      	sub	sp, #32
@@ -11940,7 +11940,7 @@ uint32_t bme280ReadHumidity(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280De
  80052a6:	2300      	movs	r3, #0
  80052a8:	81bb      	strh	r3, [r7, #12]
 
-	HAL_GPIO_WritePin(sBme280Device->sSpiChipSelectPort, sBme280Device->ui16SpiChipSelectPin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(bme280Device->spiChipSelectPort, bme280Device->spiChipSelectPin, GPIO_PIN_RESET);
  80052aa:	683b      	ldr	r3, [r7, #0]
  80052ac:	6858      	ldr	r0, [r3, #4]
  80052ae:	683b      	ldr	r3, [r7, #0]
@@ -11948,20 +11948,20 @@ uint32_t bme280ReadHumidity(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280De
  80052b2:	2200      	movs	r2, #0
  80052b4:	4619      	mov	r1, r3
  80052b6:	f7fc fe4b 	bl	8001f50 <HAL_GPIO_WritePin>
-	HAL_SPI_Transmit(hspi, &sBme280Reg.ui8Hum, sizeof(sBme280Reg.ui8Hum), ui32TimeoutSpi);
+	HAL_SPI_Transmit(hspi, &bme280Reg.hum, sizeof(bme280Reg.hum), timeoutSpi);
  80052ba:	2364      	movs	r3, #100	; 0x64
  80052bc:	2201      	movs	r2, #1
  80052be:	4945      	ldr	r1, [pc, #276]	; (80053d4 <bme280ReadHumidity+0x140>)
  80052c0:	6878      	ldr	r0, [r7, #4]
  80052c2:	f7fd fc4a 	bl	8002b5a <HAL_SPI_Transmit>
-	HAL_SPI_Receive(hspi, dataBytes, humidityDataQtyBytes, ui32TimeoutSpi);
+	HAL_SPI_Receive(hspi, dataBytes, humidityDataQtyBytes, timeoutSpi);
  80052c6:	f997 301b 	ldrsb.w	r3, [r7, #27]
  80052ca:	b29a      	uxth	r2, r3
  80052cc:	2364      	movs	r3, #100	; 0x64
  80052ce:	f107 010c 	add.w	r1, r7, #12
  80052d2:	6878      	ldr	r0, [r7, #4]
  80052d4:	f7fd fd7d 	bl	8002dd2 <HAL_SPI_Receive>
-	HAL_GPIO_WritePin(sBme280Device->sSpiChipSelectPort, sBme280Device->ui16SpiChipSelectPin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(bme280Device->spiChipSelectPort, bme280Device->spiChipSelectPin, GPIO_PIN_SET);
  80052d8:	683b      	ldr	r3, [r7, #0]
  80052da:	6858      	ldr	r0, [r3, #4]
  80052dc:	683b      	ldr	r3, [r7, #0]
@@ -11969,16 +11969,16 @@ uint32_t bme280ReadHumidity(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280De
  80052e0:	2201      	movs	r2, #1
  80052e2:	4619      	mov	r1, r3
  80052e4:	f7fc fe34 	bl	8001f50 <HAL_GPIO_WritePin>
-	sBme280Device->ui8HumMsb = dataBytes[0];
+	bme280Device->humMsb = dataBytes[0];
  80052e8:	7b3a      	ldrb	r2, [r7, #12]
  80052ea:	683b      	ldr	r3, [r7, #0]
  80052ec:	741a      	strb	r2, [r3, #16]
-	sBme280Device->ui8HumLsb = dataBytes[1];
+	bme280Device->humLsb = dataBytes[1];
  80052ee:	7b7a      	ldrb	r2, [r7, #13]
  80052f0:	683b      	ldr	r3, [r7, #0]
  80052f2:	745a      	strb	r2, [r3, #17]
 
-	int32_t adc_H = (sBme280Device->ui8HumMsb << 8) | sBme280Device->ui8HumLsb;
+	int32_t adc_H = (bme280Device->humMsb << 8) | bme280Device->humLsb;
  80052f4:	683b      	ldr	r3, [r7, #0]
  80052f6:	7c1b      	ldrb	r3, [r3, #16]
  80052f8:	021b      	lsls	r3, r3, #8
@@ -11986,16 +11986,16 @@ uint32_t bme280ReadHumidity(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280De
  80052fc:	7c52      	ldrb	r2, [r2, #17]
  80052fe:	4313      	orrs	r3, r2
  8005300:	617b      	str	r3, [r7, #20]
-	bme280ReadTemperature(hspi, sBme280Device);
+	bme280ReadTemperature(hspi, bme280Device);
  8005302:	6839      	ldr	r1, [r7, #0]
  8005304:	6878      	ldr	r0, [r7, #4]
  8005306:	f7ff fc0f 	bl	8004b28 <bme280ReadTemperature>
-	int32_t v_x1_u32r = (i32FineTemperature - ((int32_t) 76800));
+	int32_t v_x1_u32r = (fineTemperature - ((int32_t) 76800));
  800530a:	4b33      	ldr	r3, [pc, #204]	; (80053d8 <bme280ReadHumidity+0x144>)
  800530c:	681b      	ldr	r3, [r3, #0]
  800530e:	f5a3 3396 	sub.w	r3, r3, #76800	; 0x12c00
  8005312:	613b      	str	r3, [r7, #16]
-	v_x1_u32r = (((((adc_H << 14) - (((int32_t) sBme280Device->i16DigH4) << 20) - (((int32_t) sBme280Device->i16DigH5) * v_x1_u32r)) +
+	v_x1_u32r = (((((adc_H << 14) - (((int32_t) bme280Device->digH4) << 20) - (((int32_t) bme280Device->digH5) * v_x1_u32r)) +
  8005314:	697b      	ldr	r3, [r7, #20]
  8005316:	039a      	lsls	r2, r3, #14
  8005318:	683b      	ldr	r3, [r7, #0]
@@ -12009,7 +12009,7 @@ uint32_t bme280ReadHumidity(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280De
  800532c:	fb01 f303 	mul.w	r3, r1, r3
  8005330:	1ad3      	subs	r3, r2, r3
  8005332:	f503 4380 	add.w	r3, r3, #16384	; 0x4000
-			((int32_t) 16384)) >> 15) * (((((((v_x1_u32r * ((int32_t) sBme280Device->i8DigH6)) >> 10) *
+			((int32_t) 16384)) >> 15) * (((((((v_x1_u32r * ((int32_t) bme280Device->digH6)) >> 10) *
  8005336:	13db      	asrs	r3, r3, #15
  8005338:	683a      	ldr	r2, [r7, #0]
  800533a:	f992 2034 	ldrsb.w	r2, [r2, #52]	; 0x34
@@ -12017,7 +12017,7 @@ uint32_t bme280ReadHumidity(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280De
  8005340:	693a      	ldr	r2, [r7, #16]
  8005342:	fb01 f202 	mul.w	r2, r1, r2
  8005346:	1292      	asrs	r2, r2, #10
-			(((v_x1_u32r * ((int32_t) sBme280Device->ui8DigH3)) >> 11) + ((int32_t) 32768))) >> 10) + ((int32_t) 2097152)) *
+			(((v_x1_u32r * ((int32_t) bme280Device->digH3)) >> 11) + ((int32_t) 32768))) >> 10) + ((int32_t) 2097152)) *
  8005348:	6839      	ldr	r1, [r7, #0]
  800534a:	f891 102e 	ldrb.w	r1, [r1, #46]	; 0x2e
  800534e:	4608      	mov	r0, r1
@@ -12025,23 +12025,23 @@ uint32_t bme280ReadHumidity(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280De
  8005352:	fb00 f101 	mul.w	r1, r0, r1
  8005356:	12c9      	asrs	r1, r1, #11
  8005358:	f501 4100 	add.w	r1, r1, #32768	; 0x8000
-			((int32_t) 16384)) >> 15) * (((((((v_x1_u32r * ((int32_t) sBme280Device->i8DigH6)) >> 10) *
+			((int32_t) 16384)) >> 15) * (((((((v_x1_u32r * ((int32_t) bme280Device->digH6)) >> 10) *
  800535c:	fb01 f202 	mul.w	r2, r1, r2
-			(((v_x1_u32r * ((int32_t) sBme280Device->ui8DigH3)) >> 11) + ((int32_t) 32768))) >> 10) + ((int32_t) 2097152)) *
+			(((v_x1_u32r * ((int32_t) bme280Device->digH3)) >> 11) + ((int32_t) 32768))) >> 10) + ((int32_t) 2097152)) *
  8005360:	1292      	asrs	r2, r2, #10
  8005362:	f502 1200 	add.w	r2, r2, #2097152	; 0x200000
-			((int32_t) sBme280Device->i16DigH2) + 8192) >> 14));
+			((int32_t) bme280Device->digH2) + 8192) >> 14));
  8005366:	6839      	ldr	r1, [r7, #0]
  8005368:	f9b1 102c 	ldrsh.w	r1, [r1, #44]	; 0x2c
-			(((v_x1_u32r * ((int32_t) sBme280Device->ui8DigH3)) >> 11) + ((int32_t) 32768))) >> 10) + ((int32_t) 2097152)) *
+			(((v_x1_u32r * ((int32_t) bme280Device->digH3)) >> 11) + ((int32_t) 32768))) >> 10) + ((int32_t) 2097152)) *
  800536c:	fb01 f202 	mul.w	r2, r1, r2
-			((int32_t) sBme280Device->i16DigH2) + 8192) >> 14));
+			((int32_t) bme280Device->digH2) + 8192) >> 14));
  8005370:	f502 5200 	add.w	r2, r2, #8192	; 0x2000
  8005374:	1392      	asrs	r2, r2, #14
-	v_x1_u32r = (((((adc_H << 14) - (((int32_t) sBme280Device->i16DigH4) << 20) - (((int32_t) sBme280Device->i16DigH5) * v_x1_u32r)) +
+	v_x1_u32r = (((((adc_H << 14) - (((int32_t) bme280Device->digH4) << 20) - (((int32_t) bme280Device->digH5) * v_x1_u32r)) +
  8005376:	fb02 f303 	mul.w	r3, r2, r3
  800537a:	613b      	str	r3, [r7, #16]
-	v_x1_u32r = (v_x1_u32r - (((((v_x1_u32r >> 15) * (v_x1_u32r >> 15)) >> 7) * ((int32_t) sBme280Device->ui8DigH1)) >> 4));
+	v_x1_u32r = (v_x1_u32r - (((((v_x1_u32r >> 15) * (v_x1_u32r >> 15)) >> 7) * ((int32_t) bme280Device->digH1)) >> 4));
  800537c:	693b      	ldr	r3, [r7, #16]
  800537e:	13db      	asrs	r3, r3, #15
  8005380:	693a      	ldr	r2, [r7, #16]
@@ -12073,12 +12073,12 @@ uint32_t bme280ReadHumidity(SPI_HandleTypeDef *hspi, Bme280DeviceData *sBme280De
  80053ba:	fba3 2302 	umull	r2, r3, r3, r2
  80053be:	099b      	lsrs	r3, r3, #6
  80053c0:	61fb      	str	r3, [r7, #28]
-	sBme280Device->ui32Humidity = humidity_RH_x_10;
+	bme280Device->humidity = humidity_RH_x_10;
  80053c2:	683b      	ldr	r3, [r7, #0]
  80053c4:	69fa      	ldr	r2, [r7, #28]
  80053c6:	641a      	str	r2, [r3, #64]	; 0x40
 
-	return sBme280Device->ui32Humidity;
+	return bme280Device->humidity;
  80053c8:	683b      	ldr	r3, [r7, #0]
  80053ca:	6c1b      	ldr	r3, [r3, #64]	; 0x40
 }
